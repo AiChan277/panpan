@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.panyaya.ui.MainController">
+    <left>
+        <VBox styleClass="sidebar">
+            <VBox styleClass="brand-box">
+                <Label text="パン屋ヤ" styleClass="sidebar-brand-jp"/>
+                <Label text="PAN-YA YA · From Ingredients to Sales" styleClass="sidebar-brand"/>
+            </VBox>
+            <ScrollPane fitToWidth="true" styleClass="nav-scroll" VBox.vgrow="ALWAYS" hbarPolicy="NEVER">
+                <VBox fx:id="navBox" styleClass="nav-box"/>
+            </ScrollPane>
+            <VBox styleClass="user-box">
+                <Label fx:id="userLabel" styleClass="sidebar-user"/>
+                <Label fx:id="roleLabel" styleClass="sidebar-role"/>
+                <HBox spacing="6">
+                    <Button text="Change password" onAction="#onChangePassword" styleClass="sidebar-button"/>
+                    <Button text="Sign out" onAction="#onSignOut" styleClass="sidebar-button"/>
+                </HBox>
+            </VBox>
+        </VBox>
+    </left>
+    <center>
+        <VBox>
+            <HBox styleClass="top-bar">
+                <Label fx:id="pageTitle" styleClass="page-title"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Label fx:id="bakeryLabel" styleClass="muted"/>
+            </HBox>
+            <StackPane fx:id="contentPane" styleClass="content" VBox.vgrow="ALWAYS"/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="status-bar">
+            <Label fx:id="statusLabel" text="Ready"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <ProgressIndicator fx:id="busyIndicator" visible="false" prefWidth="14" prefHeight="14" maxWidth="14" maxHeight="14"/>
+            <Label fx:id="saveLabel"/>
+        </HBox>
+    </bottom>
+</BorderPane>

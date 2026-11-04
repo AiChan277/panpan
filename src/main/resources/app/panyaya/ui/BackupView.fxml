@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.panyaya.ui.BackupController" styleClass="view">
+    <HBox spacing="12">
+        <VBox styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Back up now" styleClass="card-title"/>
+            <Label text="Creates a .panyabak file (a ZIP with the data and a checksum manifest). Copy it to a USB stick or another computer regularly."
+                   styleClass="hint" wrapText="true"/>
+            <Button text="Create backup..." styleClass="primary" onAction="#onBackup"/>
+        </VBox>
+        <VBox styleClass="card" HBox.hgrow="ALWAYS">
+            <Label text="Restore" styleClass="card-title"/>
+            <Label text="The backup is fully checked first. Your current data is backed up automatically before it is replaced."
+                   styleClass="hint" wrapText="true"/>
+            <Button text="Restore from file..." styleClass="danger" onAction="#onRestoreFile"/>
+        </VBox>
+    </HBox>
+    <HBox styleClass="toolbar">
+        <Label text="Automatic backups (one per day, plus one before every restore)" styleClass="section-title"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="Verify selected" onAction="#onVerify"/>
+        <Button text="Restore selected" styleClass="danger" onAction="#onRestoreSelected"/>
+        <Button text="Open backup folder" onAction="#onOpenFolder"/>
+    </HBox>
+    <TableView fx:id="table" VBox.vgrow="ALWAYS"/>
+    <Label fx:id="locationLabel" styleClass="hint" wrapText="true"/>
+</VBox>

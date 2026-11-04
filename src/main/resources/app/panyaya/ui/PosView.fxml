@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.panyaya.ui.PosController" spacing="14">
+    <VBox spacing="10" HBox.hgrow="ALWAYS">
+        <TextField fx:id="searchField" styleClass="pos-search"
+                   promptText="F2  Search name / type or scan SKU, Enter adds the first match"/>
+        <Label fx:id="tileInfo" styleClass="hint"/>
+        <ScrollPane fitToWidth="true" styleClass="form-scroll" VBox.vgrow="ALWAYS">
+            <FlowPane fx:id="tilePane" hgap="10" vgap="10"/>
+        </ScrollPane>
+    </VBox>
+    <VBox styleClass="cart-panel">
+        <HBox styleClass="toolbar">
+            <Label text="Cart" styleClass="section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="itemCountLabel" styleClass="muted"/>
+        </HBox>
+        <TableView fx:id="cartTable" VBox.vgrow="ALWAYS"/>
+        <HBox spacing="6">
+            <Button text="−" onAction="#onMinus" prefWidth="44"/>
+            <Button text="+" onAction="#onPlus" prefWidth="44"/>
+            <Button text="Remove (Del)" onAction="#onRemove"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Button text="Clear" styleClass="danger" onAction="#onClear"/>
+        </HBox>
+        <HBox styleClass="toolbar">
+            <Label text="Total" styleClass="section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="totalLabel" styleClass="cart-total" text="Rp 0"/>
+        </HBox>
+        <Button fx:id="payButton" text="PAY  (F12)" styleClass="pay-button" maxWidth="Infinity" onAction="#onPay"/>
+        <Label fx:id="lastSaleLabel" styleClass="hint" wrapText="true"/>
+    </VBox>
+</HBox>

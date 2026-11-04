@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.panyaya.ui.ProductsController" styleClass="view">
+    <HBox styleClass="toolbar">
+        <TextField fx:id="searchField" promptText="Search name or SKU..." prefWidth="240"/>
+        <ComboBox fx:id="categoryFilter" promptText="All categories" prefWidth="170"/>
+        <ComboBox fx:id="typeFilter" promptText="All types" prefWidth="170"/>
+        <CheckBox fx:id="archivedCheck" text="Show archived"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="newButton" text="+ New product" styleClass="primary" onAction="#onNew"/>
+        <Button fx:id="editButton" text="Edit" onAction="#onEdit"/>
+        <Button fx:id="archiveButton" text="Archive / restore" onAction="#onArchive"/>
+        <Button text="Price history" onAction="#onPriceHistory"/>
+    </HBox>
+    <HBox spacing="12" VBox.vgrow="ALWAYS">
+        <TableView fx:id="table" HBox.hgrow="ALWAYS"/>
+        <VBox styleClass="card" prefWidth="240" minWidth="220">
+            <Label text="Categories" styleClass="card-title"/>
+            <ListView fx:id="categoryList" VBox.vgrow="ALWAYS"/>
+            <HBox spacing="6">
+                <Button fx:id="addCategoryButton" text="Add" onAction="#onAddCategory"/>
+                <Button fx:id="renameCategoryButton" text="Rename" onAction="#onRenameCategory"/>
+                <Button fx:id="toggleCategoryButton" text="On / off" onAction="#onToggleCategory"/>
+            </HBox>
+            <Label text="Inactive categories cannot be chosen for new products." styleClass="hint" wrapText="true"/>
+        </VBox>
+    </HBox>
+</VBox>

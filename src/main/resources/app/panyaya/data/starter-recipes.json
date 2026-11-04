@@ -1,0 +1,83 @@
+{
+  "note": "ILLUSTRATIVE STARTER TEMPLATES - example quantities only, not validated commercial recipes. Review and adjust before activating.",
+  "ingredients": [
+    { "code": "FLOUR-BREAD", "name": "Bread flour (high protein)", "baseUnit": "G", "minimumStock": "10000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "FLOUR-AP", "name": "All-purpose flour (medium protein)", "baseUnit": "G", "minimumStock": "5000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "SUGAR", "name": "Granulated sugar", "baseUnit": "G", "minimumStock": "3000", "tracksExpiry": false, "stockTracked": true },
+    { "code": "SUGAR-ICING", "name": "Icing sugar", "baseUnit": "G", "minimumStock": "1000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "YEAST", "name": "Instant yeast", "baseUnit": "G", "minimumStock": "250", "tracksExpiry": true, "stockTracked": true },
+    { "code": "SALT", "name": "Salt", "baseUnit": "G", "minimumStock": "500", "tracksExpiry": false, "stockTracked": true },
+    { "code": "BUTTER", "name": "Butter", "baseUnit": "G", "minimumStock": "2000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "MILK-POWDER", "name": "Milk powder", "baseUnit": "G", "minimumStock": "1000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "EGG", "name": "Eggs", "baseUnit": "PCS", "minimumStock": "30", "tracksExpiry": true, "stockTracked": true },
+    { "code": "CHOC-FILL", "name": "Chocolate filling", "baseUnit": "G", "minimumStock": "1000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "OIL", "name": "Frying oil", "baseUnit": "ML", "minimumStock": "2000", "tracksExpiry": true, "stockTracked": true },
+    { "code": "WATER", "name": "Water", "baseUnit": "ML", "minimumStock": "0", "tracksExpiry": false, "stockTracked": false }
+  ],
+  "products": [
+    { "sku": "BRE-WHITE", "name": "White Bread (Roti Tawar)", "category": "Bread", "price": "18000", "shelfLifeHours": 48, "description": "Soft sandwich loaf." },
+    { "sku": "BRE-CHOCBUN", "name": "Chocolate Sweet Bun (Roti Manis Coklat)", "category": "Bread", "price": "8000", "shelfLifeHours": 36, "description": "Sweet bun with chocolate filling." },
+    { "sku": "SNA-DONUT", "name": "Sugar Donut (Donat Gula)", "category": "Snack", "price": "6000", "shelfLifeHours": 24, "description": "Fried yeast donut with icing sugar." },
+    { "sku": "PAS-CROIS", "name": "Butter Croissant", "category": "Pastry", "price": "15000", "shelfLifeHours": 24, "description": "Laminated butter pastry." }
+  ],
+  "recipes": [
+    {
+      "name": "White Bread (Roti Tawar)", "productSku": "BRE-WHITE", "yield": "1", "prepMinutes": 90, "bakeMinutes": 35,
+      "instructions": "Mix, knead until smooth, first proof 60 min, shape into tin, second proof 45 min, bake at 180 C.",
+      "items": [
+        { "ingredientCode": "FLOUR-BREAD", "quantity": "500", "unit": "G", "note": "dough" },
+        { "ingredientCode": "WATER", "quantity": "300", "unit": "ML", "note": "dough" },
+        { "ingredientCode": "SUGAR", "quantity": "30", "unit": "G", "note": "dough" },
+        { "ingredientCode": "YEAST", "quantity": "6", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SALT", "quantity": "9", "unit": "G", "note": "dough" },
+        { "ingredientCode": "BUTTER", "quantity": "30", "unit": "G", "note": "dough" },
+        { "ingredientCode": "MILK-POWDER", "quantity": "20", "unit": "G", "note": "dough" }
+      ]
+    },
+    {
+      "name": "Chocolate Sweet Bun (Roti Manis Coklat)", "productSku": "BRE-CHOCBUN", "yield": "12", "prepMinutes": 100, "bakeMinutes": 15,
+      "instructions": "Make sweet dough, divide into 12 pieces of about 60 g, fill with 20 g chocolate each, proof, egg wash, bake at 190 C.",
+      "items": [
+        { "ingredientCode": "FLOUR-BREAD", "quantity": "500", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SUGAR", "quantity": "80", "unit": "G", "note": "dough" },
+        { "ingredientCode": "YEAST", "quantity": "8", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SALT", "quantity": "6", "unit": "G", "note": "dough" },
+        { "ingredientCode": "EGG", "quantity": "2", "unit": "PCS", "note": "dough and egg wash" },
+        { "ingredientCode": "BUTTER", "quantity": "60", "unit": "G", "note": "dough" },
+        { "ingredientCode": "MILK-POWDER", "quantity": "25", "unit": "G", "note": "dough" },
+        { "ingredientCode": "WATER", "quantity": "220", "unit": "ML", "note": "dough" },
+        { "ingredientCode": "CHOC-FILL", "quantity": "240", "unit": "G", "note": "filling" }
+      ]
+    },
+    {
+      "name": "Sugar Donut (Donat Gula)", "productSku": "SNA-DONUT", "yield": "16", "prepMinutes": 90, "bakeMinutes": 10,
+      "instructions": "Make soft dough, proof, cut rings, second proof, fry at 170 C until golden, dust with icing sugar.",
+      "items": [
+        { "ingredientCode": "FLOUR-BREAD", "quantity": "350", "unit": "G", "note": "dough" },
+        { "ingredientCode": "FLOUR-AP", "quantity": "150", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SUGAR", "quantity": "60", "unit": "G", "note": "dough" },
+        { "ingredientCode": "YEAST", "quantity": "8", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SALT", "quantity": "5", "unit": "G", "note": "dough" },
+        { "ingredientCode": "EGG", "quantity": "1", "unit": "PCS", "note": "dough" },
+        { "ingredientCode": "BUTTER", "quantity": "50", "unit": "G", "note": "dough" },
+        { "ingredientCode": "WATER", "quantity": "250", "unit": "ML", "note": "dough" },
+        { "ingredientCode": "OIL", "quantity": "0.3", "unit": "L", "note": "frying (absorbed share)" },
+        { "ingredientCode": "SUGAR-ICING", "quantity": "80", "unit": "G", "note": "topping" }
+      ]
+    },
+    {
+      "name": "Butter Croissant", "productSku": "PAS-CROIS", "yield": "10", "prepMinutes": 240, "bakeMinutes": 18,
+      "instructions": "Make dough, rest cold, laminate with butter block (3 single folds), roll, cut triangles, shape, proof, egg wash, bake at 200 C.",
+      "items": [
+        { "ingredientCode": "FLOUR-BREAD", "quantity": "500", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SUGAR", "quantity": "55", "unit": "G", "note": "dough" },
+        { "ingredientCode": "YEAST", "quantity": "10", "unit": "G", "note": "dough" },
+        { "ingredientCode": "SALT", "quantity": "10", "unit": "G", "note": "dough" },
+        { "ingredientCode": "MILK-POWDER", "quantity": "20", "unit": "G", "note": "dough" },
+        { "ingredientCode": "WATER", "quantity": "270", "unit": "ML", "note": "dough" },
+        { "ingredientCode": "BUTTER", "quantity": "0.3", "unit": "KG", "note": "lamination" },
+        { "ingredientCode": "EGG", "quantity": "1", "unit": "PCS", "note": "egg wash" }
+      ]
+    }
+  ]
+}

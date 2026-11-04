@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.panyaya.ui.UsersController" styleClass="view">
+    <HBox styleClass="toolbar">
+        <Label text="Each employee signs in with their own account, so every sale and stock change shows who did it."
+               styleClass="hint"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button text="+ New user" styleClass="primary" onAction="#onNew"/>
+        <Button text="Edit" onAction="#onEdit"/>
+        <Button text="Reset password" onAction="#onReset"/>
+        <Button text="Activate / deactivate" onAction="#onToggle"/>
+    </HBox>
+    <TableView fx:id="table" VBox.vgrow="ALWAYS"/>
+    <Label text="Owner: everything. Baker: production, recipes (draft), receiving, waste, reports. Cashier: point of sale, own sales, product waste."
+           styleClass="hint" wrapText="true"/>
+</VBox>

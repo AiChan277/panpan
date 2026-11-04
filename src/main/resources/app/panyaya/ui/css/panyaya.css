@@ -1,0 +1,404 @@
+/* Pan-ya Ya theme - warm bakery colours, calm and readable.
+   Colours are defined once as looked-up variables on .root. */
+.root {
+    -crust: #c8743a;
+    -crust-dark: #a95d2a;
+    -crust-light: #f6e3d3;
+    -cocoa: #3e2c23;
+    -cocoa-2: #52392d;
+    -cream: #fbf7f2;
+    -flour: #ffffff;
+    -line: #eadfd3;
+    -ink: #2b2420;
+    -muted: #7a6a5e;
+    -ok: #2e7d32;
+    -warn: #8a5a00;
+    -warn-bg: #fff4d6;
+    -danger: #b3261e;
+    -danger-bg: #fde7e5;
+
+    -fx-font-family: "Segoe UI", "Yu Gothic UI", "Meiryo", sans-serif;
+    -fx-font-size: 13px;
+    -fx-base: #f3ece4;
+    -fx-accent: -crust;
+    -fx-focus-color: -crust;
+    -fx-faint-focus-color: #c8743a33;
+    -fx-text-base-color: -ink;
+    -fx-background-color: -cream;
+}
+
+/* ---------- sign-in / setup / loading ---------- */
+.auth-background {
+    -fx-background-color: linear-gradient(to bottom right, #fbf7f2, #f3e2d1);
+}
+.auth-card {
+    -fx-background-color: -flour;
+    -fx-background-radius: 14;
+    -fx-border-color: -line;
+    -fx-border-radius: 14;
+    -fx-padding: 32 36 32 36;
+    -fx-effect: dropshadow(gaussian, rgba(62, 44, 35, 0.12), 24, 0.2, 0, 6);
+}
+.brand-jp {
+    -fx-font-family: "Yu Gothic UI", "Meiryo", "MS Gothic", sans-serif;
+    -fx-font-size: 34px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.brand-latin {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -crust;
+}
+.tagline {
+    -fx-font-style: italic;
+    -fx-text-fill: -muted;
+}
+
+/* ---------- application shell ---------- */
+.sidebar {
+    -fx-background-color: -cocoa;
+    -fx-pref-width: 220;
+    -fx-min-width: 200;
+}
+.brand-box {
+    -fx-padding: 20 18 14 18;
+    -fx-spacing: 0;
+}
+.sidebar-brand-jp {
+    -fx-font-family: "Yu Gothic UI", "Meiryo", "MS Gothic", sans-serif;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #fff7ef;
+}
+.sidebar-brand {
+    -fx-font-size: 11px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #e8b48d;
+}
+.nav-scroll, .nav-scroll > .viewport {
+    -fx-background-color: transparent;
+    -fx-background: transparent;
+}
+.nav-box {
+    -fx-padding: 4 10 10 10;
+    -fx-spacing: 2;
+}
+.nav-section {
+    -fx-text-fill: #b9a697;
+    -fx-font-size: 10px;
+    -fx-font-weight: bold;
+    -fx-padding: 12 8 4 8;
+}
+.nav-button {
+    -fx-background-color: transparent;
+    -fx-text-fill: #f1e6dc;
+    -fx-alignment: center-left;
+    -fx-padding: 8 10 8 12;
+    -fx-background-radius: 7;
+    -fx-cursor: hand;
+    -fx-font-size: 13px;
+}
+.nav-button:hover {
+    -fx-background-color: -cocoa-2;
+}
+.nav-button:selected {
+    -fx-background-color: -crust;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.user-box {
+    -fx-padding: 12 14 16 14;
+    -fx-spacing: 6;
+    -fx-border-color: #5a4337 transparent transparent transparent;
+}
+.sidebar-user {
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.sidebar-role {
+    -fx-text-fill: #c9b6a6;
+    -fx-font-size: 11px;
+}
+.sidebar-button {
+    -fx-background-color: -cocoa-2;
+    -fx-text-fill: #f1e6dc;
+    -fx-background-radius: 6;
+    -fx-font-size: 11px;
+    -fx-cursor: hand;
+}
+.sidebar-button:hover {
+    -fx-background-color: #6a4c3d;
+}
+.top-bar {
+    -fx-padding: 14 24 10 24;
+    -fx-alignment: center-left;
+    -fx-spacing: 12;
+    -fx-background-color: -cream;
+}
+.page-title {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.content {
+    -fx-padding: 0 24 16 24;
+}
+.status-bar {
+    -fx-background-color: #f1e8de;
+    -fx-border-color: -line transparent transparent transparent;
+    -fx-padding: 5 16 5 16;
+    -fx-spacing: 10;
+    -fx-alignment: center-left;
+}
+.status-bar .label {
+    -fx-text-fill: -muted;
+    -fx-font-size: 11px;
+}
+
+/* ---------- views, cards, toolbars ---------- */
+.view {
+    -fx-spacing: 12;
+}
+.toolbar {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+}
+.card {
+    -fx-background-color: -flour;
+    -fx-background-radius: 10;
+    -fx-border-color: -line;
+    -fx-border-radius: 10;
+    -fx-padding: 14 16 14 16;
+    -fx-spacing: 8;
+}
+.card-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.kpi-card {
+    -fx-background-color: -flour;
+    -fx-background-radius: 10;
+    -fx-border-color: -line;
+    -fx-border-radius: 10;
+    -fx-padding: 12 16 12 16;
+    -fx-spacing: 2;
+    -fx-pref-width: 190;
+    -fx-min-width: 170;
+}
+.kpi-label {
+    -fx-text-fill: -muted;
+    -fx-font-size: 11px;
+}
+.kpi-value {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.kpi-note {
+    -fx-text-fill: -muted;
+    -fx-font-size: 10px;
+}
+.muted {
+    -fx-text-fill: -muted;
+}
+.hint {
+    -fx-text-fill: -muted;
+    -fx-font-size: 11px;
+}
+.section-title {
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.empty-state {
+    -fx-text-fill: -muted;
+    -fx-font-size: 13px;
+}
+.banner-warning {
+    -fx-background-color: -warn-bg;
+    -fx-text-fill: -warn;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 8;
+}
+.banner-danger {
+    -fx-background-color: -danger-bg;
+    -fx-text-fill: -danger;
+    -fx-padding: 8 12 8 12;
+    -fx-background-radius: 8;
+}
+.form-label {
+    -fx-text-fill: -ink;
+    -fx-font-weight: bold;
+}
+.form-error {
+    -fx-text-fill: -danger;
+    -fx-background-color: -danger-bg;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 6;
+}
+/* -fx-background must stay a real colour: JavaFX derives the default text colour from it
+   (transparent would make chart labels white on white). */
+.form-scroll {
+    -fx-background: -cream;
+    -fx-background-color: transparent;
+    -fx-padding: 2;
+}
+.form-scroll > .viewport {
+    -fx-background-color: transparent;
+}
+.mono {
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 13px;
+}
+
+/* ---------- buttons ---------- */
+.button {
+    -fx-background-radius: 7;
+    -fx-cursor: hand;
+    -fx-padding: 6 14 6 14;
+}
+.button.primary {
+    -fx-background-color: -crust;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+.button.primary:hover {
+    -fx-background-color: -crust-dark;
+}
+.button.danger {
+    -fx-background-color: -danger-bg;
+    -fx-text-fill: -danger;
+    -fx-border-color: #f2b8b5;
+    -fx-border-radius: 7;
+}
+.button.link {
+    -fx-background-color: transparent;
+    -fx-text-fill: -crust-dark;
+    -fx-underline: true;
+    -fx-padding: 0;
+}
+
+/* ---------- tables ---------- */
+.table-view {
+    -fx-background-color: -flour;
+    -fx-background-radius: 8;
+    -fx-border-color: -line;
+    -fx-border-radius: 8;
+    -fx-table-cell-border-color: #f1e9e0;
+}
+.table-view .column-header-background {
+    -fx-background-color: #f6efe7;
+    -fx-background-radius: 8 8 0 0;
+}
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.table-row-cell:selected {
+    -fx-background-color: -crust-light;
+}
+.table-row-cell:selected .text {
+    -fx-fill: -ink;
+}
+.number-column {
+    -fx-alignment: center-right;
+}
+.list-view {
+    -fx-background-color: -flour;
+    -fx-border-color: -line;
+    -fx-border-radius: 8;
+    -fx-background-radius: 8;
+}
+
+/* ---------- point of sale ---------- */
+.pos-search {
+    -fx-font-size: 16px;
+    -fx-padding: 8 12 8 12;
+}
+.pos-tile {
+    -fx-background-color: -flour;
+    -fx-border-color: -line;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-pref-width: 160;
+    -fx-pref-height: 96;
+    -fx-alignment: top-left;
+    -fx-padding: 10 12 10 12;
+    -fx-cursor: hand;
+}
+.pos-tile:hover {
+    -fx-border-color: -crust;
+}
+.pos-tile:disabled {
+    -fx-opacity: 0.55;
+}
+.tile-name {
+    -fx-font-weight: bold;
+    -fx-font-size: 13px;
+    -fx-text-fill: -ink;
+}
+.tile-price {
+    -fx-text-fill: -crust-dark;
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+.tile-stock {
+    -fx-text-fill: -muted;
+    -fx-font-size: 11px;
+}
+.cart-panel {
+    -fx-background-color: -flour;
+    -fx-border-color: -line;
+    -fx-border-radius: 10;
+    -fx-background-radius: 10;
+    -fx-padding: 14;
+    -fx-spacing: 10;
+    -fx-pref-width: 400;
+    -fx-min-width: 360;
+}
+.cart-total {
+    -fx-font-size: 30px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -cocoa;
+}
+.pay-button {
+    -fx-background-color: -crust;
+    -fx-text-fill: white;
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-pref-height: 54;
+    -fx-background-radius: 10;
+}
+.pay-button:hover {
+    -fx-background-color: -crust-dark;
+}
+.change-amount {
+    -fx-font-size: 32px;
+    -fx-font-weight: bold;
+    -fx-text-fill: -ok;
+}
+
+/* ---------- charts ---------- */
+.chart {
+    -fx-padding: 4;
+}
+.chart-bar {
+    -fx-bar-fill: -crust;
+}
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+.default-color0.chart-pie { -fx-pie-color: #c8743a; }
+.default-color1.chart-pie { -fx-pie-color: #3e2c23; }
+.default-color2.chart-pie { -fx-pie-color: #e8b48d; }
+.default-color3.chart-pie { -fx-pie-color: #8a5a00; }
+.default-color4.chart-pie { -fx-pie-color: #b3261e; }
+.default-color5.chart-pie { -fx-pie-color: #7a6a5e; }
+
+.tab-pane > .tab-header-area > .headers-region > .tab:selected {
+    -fx-background-color: -flour;
+    -fx-border-color: -crust transparent transparent transparent;
+    -fx-border-width: 2 0 0 0;
+}

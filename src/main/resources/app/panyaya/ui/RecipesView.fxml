@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="app.panyaya.ui.RecipesController" styleClass="view">
+    <HBox styleClass="toolbar">
+        <TextField fx:id="searchField" promptText="Search recipe or product..." prefWidth="230"/>
+        <CheckBox fx:id="archivedCheck" text="Show archived"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="newButton" text="+ New recipe" styleClass="primary" onAction="#onNew"/>
+        <Button fx:id="editButton" text="Edit" onAction="#onEdit"/>
+        <Button fx:id="duplicateButton" text="Duplicate" onAction="#onDuplicate"/>
+        <Button fx:id="activateButton" text="Activate" onAction="#onActivate"/>
+        <Button fx:id="archiveButton" text="Archive" onAction="#onArchive"/>
+        <Button fx:id="starterButton" text="Import starter templates" onAction="#onImportStarter"/>
+    </HBox>
+    <SplitPane dividerPositions="0.45" VBox.vgrow="ALWAYS">
+        <TableView fx:id="table"/>
+        <ScrollPane fitToWidth="true" styleClass="form-scroll">
+            <VBox fx:id="detailBox" styleClass="card" spacing="10">
+                <Label fx:id="titleLabel" styleClass="section-title" text="Select a recipe"/>
+                <Label fx:id="infoLabel" styleClass="muted" wrapText="true"/>
+                <Label fx:id="templateBanner" styleClass="banner-warning" wrapText="true" managed="false" visible="false"
+                       text="Starter template - example quantities only. Check and adjust before activating."/>
+                <Label text="Ingredients" styleClass="card-title"/>
+                <TableView fx:id="itemsTable" prefHeight="200"/>
+                <Label fx:id="costLabel" wrapText="true"/>
+                <Label text="Scale calculator - what do I need for..." styleClass="card-title"/>
+                <HBox styleClass="toolbar">
+                    <TextField fx:id="targetField" promptText="pieces, e.g. 48" prefWidth="140" onAction="#onCalculate"/>
+                    <Button text="Calculate" onAction="#onCalculate"/>
+                    <Label fx:id="scaleLabel" styleClass="hint"/>
+                </HBox>
+                <TableView fx:id="requirementsTable" prefHeight="200"/>
+                <Label text="Instructions" styleClass="card-title"/>
+                <Label fx:id="instructionsLabel" wrapText="true"/>
+            </VBox>
+        </ScrollPane>
+    </SplitPane>
+</VBox>
