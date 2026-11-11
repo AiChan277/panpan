@@ -39,7 +39,7 @@ public class SuppliersController extends BaseController {
                 UiUtil.<Supplier>column("Phone", 130, s -> TextUtil.orDash(s.getPhone())),
                 UiUtil.<Supplier>column("E-mail", 180, s -> TextUtil.orDash(s.getEmail())),
                 UiUtil.<Supplier>column("Address", 200, s -> TextUtil.orDash(s.getAddress())),
-                UiUtil.<Supplier>column("Status", 90, s -> s.isActive() ? "✓ Active" : "Inactive")));
+                UiUtil.<Supplier>badgeColumn("Status", 90, s -> s.isActive() ? "Active" : "Inactive")));
         UiUtil.placeholder(table, "No suppliers yet.");
         table.getSelectionModel().selectedItemProperty().addListener((obs, old, supplier) -> showHistory(supplier));
         table.setOnMouseClicked(e -> {

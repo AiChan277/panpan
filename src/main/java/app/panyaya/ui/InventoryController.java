@@ -76,7 +76,7 @@ public class InventoryController extends BaseController {
                 UiUtil.<IngredientLot>column("Unit", 50, l -> ctx.inventory().unitOf(StockKind.INGREDIENT, l.getItemId()).getSymbol()),
                 UiUtil.<IngredientLot>numberColumn("Cost / unit", 90, l -> Formatters.unitCost(l.getUnitCost())),
                 UiUtil.<IngredientLot>numberColumn("Value", 100, l -> Formatters.money(l.getRemainingValue())),
-                UiUtil.<IngredientLot>column("State", 100, l -> state(l.isDepleted(), l.isExpiredAt(now(), zone())))));
+                UiUtil.<IngredientLot>badgeColumn("State", 100, l -> state(l.isDepleted(), l.isExpiredAt(now(), zone())))));
         UiUtil.placeholder(lotsTable, "No ingredient stock yet. Use \"Receive goods\" to record a delivery.");
 
         batchesTable.getColumns().setAll(Arrays.asList(
@@ -88,11 +88,11 @@ public class InventoryController extends BaseController {
                 UiUtil.<FinishedGoodsBatch>numberColumn("Initial", 70, b -> Formatters.quantity(b.getInitialQuantity())),
                 UiUtil.<FinishedGoodsBatch>numberColumn("Remaining", 80, b -> Formatters.quantity(b.getRemainingQuantity())),
                 UiUtil.<FinishedGoodsBatch>numberColumn("Cost / pc", 90, b -> Formatters.money(b.getUnitCost())),
-                UiUtil.<FinishedGoodsBatch>column("State", 100, b -> state(b.isDepleted(), b.isExpiredAt(now(), zone())))));
+                UiUtil.<FinishedGoodsBatch>badgeColumn("State", 100, b -> state(b.isDepleted(), b.isExpiredAt(now(), zone())))));
         UiUtil.placeholder(batchesTable, "No finished goods yet. Complete a production order or receive resale products.");
 
         ledgerTable.getColumns().setAll(Arrays.asList(
-                UiUtil.<InventoryMovement>column("Time", 130, m -> Formatters.dateTime(m.getOccurredAt(), zone())),
+                UiUtil.<InventoryMovement>column("Time", 150, m -> Formatters.dateTime(m.getOccurredAt(), zone())),
                 UiUtil.<InventoryMovement>column("Type", 120, InventoryMovement::getTypeName),
                 UiUtil.<InventoryMovement>column("Item", 180, m -> ctx.inventory().itemName(m.getStockKind(), m.getItemId())),
                 UiUtil.<InventoryMovement>column("Lot / batch", 160, m -> ctx.inventory().lotCode(m.getStockKind(), m.getLotId())),
@@ -136,7 +136,7 @@ public class InventoryController extends BaseController {
         if (depleted) {
             return "Used up";
         }
-        return expired ? "✖ Expired" : "✓ Usable";
+        return expired ? "Expired" : "Usable";
     }
 
     private String userName(long userId) {

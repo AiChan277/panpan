@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.CardGrid?>
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -11,50 +14,66 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="app.panyaya.ui.WasteController" styleClass="view">
-    <HBox spacing="12">
-        <VBox styleClass="card" HBox.hgrow="ALWAYS" prefWidth="520">
-            <Label text="Record waste" styleClass="card-title"/>
-            <GridPane hgap="10" vgap="8">
-                <columnConstraints>
-                    <ColumnConstraints minWidth="110"/>
-                    <ColumnConstraints hgrow="ALWAYS"/>
-                </columnConstraints>
-                <Label text="What" GridPane.rowIndex="0" styleClass="form-label"/>
-                <ComboBox fx:id="kindBox" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
-                <Label text="Item" GridPane.rowIndex="1" styleClass="form-label"/>
-                <ComboBox fx:id="itemBox" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
-                <Label text="Lot / batch" GridPane.rowIndex="2" styleClass="form-label"/>
-                <ComboBox fx:id="lotBox" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
-                <Label fx:id="quantityCaption" text="Quantity" GridPane.rowIndex="3" styleClass="form-label"/>
-                <TextField fx:id="quantityField" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="e.g. 3"/>
-                <Label text="Reason" GridPane.rowIndex="4" styleClass="form-label"/>
-                <ComboBox fx:id="reasonBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
-                <Label text="Note" GridPane.rowIndex="5" styleClass="form-label"/>
-                <TextField fx:id="noteField" GridPane.rowIndex="5" GridPane.columnIndex="1"
-                           promptText="required for Other (at least 5 characters)"/>
-            </GridPane>
-            <HBox styleClass="toolbar">
-                <Label fx:id="lossLabel" styleClass="section-title" text="Estimated loss: -"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button text="Record waste" styleClass="primary" onAction="#onRecord"/>
-            </HBox>
-        </VBox>
-        <VBox styleClass="card" HBox.hgrow="ALWAYS" prefWidth="560">
-            <HBox styleClass="toolbar">
-                <Label text="End-of-day write-off" styleClass="card-title"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="writeOffButton" text="Write off selected" onAction="#onWriteOff"/>
-            </HBox>
-            <Label fx:id="endOfDayHint" styleClass="hint" wrapText="true"/>
-            <TableView fx:id="endOfDayTable" prefHeight="190"/>
-        </VBox>
-    </HBox>
-    <HBox styleClass="toolbar">
-        <Label text="Waste history (last 30 days)" styleClass="section-title"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Label fx:id="historyTotal" styleClass="muted"/>
-    </HBox>
-    <TableView fx:id="historyTable" VBox.vgrow="ALWAYS"/>
-</VBox>
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.panyaya.ui.WasteController" fitToWidth="true" fitToHeight="true"
+            styleClass="form-scroll">
+    <VBox styleClass="view">
+        <CardGrid minColumnWidth="420" maxColumns="2" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="wastemanagement" size="16"/>
+                    <Label text="Record waste" styleClass="card-title"/>
+                </HBox>
+                <GridPane styleClass="form-grid">
+                    <columnConstraints>
+                        <ColumnConstraints minWidth="100" prefWidth="110"/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <Label text="What" GridPane.rowIndex="0" styleClass="form-label"/>
+                    <ComboBox fx:id="kindBox" GridPane.rowIndex="0" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="Item" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <ComboBox fx:id="itemBox" GridPane.rowIndex="1" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="Lot / batch" GridPane.rowIndex="2" styleClass="form-label"/>
+                    <ComboBox fx:id="lotBox" GridPane.rowIndex="2" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label fx:id="quantityCaption" text="Quantity" GridPane.rowIndex="3" styleClass="form-label"/>
+                    <TextField fx:id="quantityField" GridPane.rowIndex="3" GridPane.columnIndex="1" promptText="e.g. 3"/>
+                    <Label text="Reason" GridPane.rowIndex="4" styleClass="form-label"/>
+                    <ComboBox fx:id="reasonBox" GridPane.rowIndex="4" GridPane.columnIndex="1" maxWidth="Infinity"/>
+                    <Label text="Note" GridPane.rowIndex="5" styleClass="form-label"/>
+                    <TextField fx:id="noteField" GridPane.rowIndex="5" GridPane.columnIndex="1"
+                               promptText="required for Other (at least 5 characters)"/>
+                </GridPane>
+                <Region VBox.vgrow="ALWAYS"/>
+                <Region styleClass="divider"/>
+                <HBox styleClass="toolbar">
+                    <VBox spacing="0">
+                        <Label text="Estimated loss" styleClass="hint"/>
+                        <Label fx:id="lossLabel" styleClass="detail-title" text="-"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button text="Record waste" styleClass="primary" onAction="#onRecord">
+                        <graphic><Icon name="check" size="15"/></graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="clock" size="16"/>
+                    <Label text="End-of-day write-off" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Button fx:id="writeOffButton" text="Write off selected" styleClass="danger" onAction="#onWriteOff">
+                        <graphic><Icon name="wastemanagement" size="15"/></graphic>
+                    </Button>
+                </HBox>
+                <Label fx:id="endOfDayHint" styleClass="hint" wrapText="true"/>
+                <TableView fx:id="endOfDayTable" prefHeight="200" minHeight="160" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </CardGrid>
+        <HBox styleClass="section-header">
+            <Label text="Waste history, last 30 days" styleClass="section-title"/>
+            <Region HBox.hgrow="ALWAYS"/>
+            <Label fx:id="historyTotal" styleClass="hint"/>
+        </HBox>
+        <TableView fx:id="historyTable" VBox.vgrow="ALWAYS" minHeight="220"/>
+    </VBox>
+</ScrollPane>

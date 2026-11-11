@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.CardGrid?>
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -10,82 +12,146 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="app.panyaya.ui.SettingsController" fitToWidth="true" styleClass="form-scroll">
-    <VBox styleClass="view">
-        <HBox spacing="12">
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="Bakery profile (shown on receipts)" styleClass="card-title"/>
-                <GridPane hgap="10" vgap="8">
-                    <columnConstraints><ColumnConstraints minWidth="120"/><ColumnConstraints hgrow="ALWAYS"/></columnConstraints>
+    <VBox styleClass="view" spacing="16">
+        <CardGrid minColumnWidth="420" maxColumns="2" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="products" size="16"/>
+                    <Label text="Bakery profile" styleClass="card-title"/>
+                </HBox>
+                <Label text="Shown on every receipt." styleClass="hint"/>
+                <GridPane styleClass="form-grid">
+                    <columnConstraints><ColumnConstraints minWidth="120" prefWidth="130"/><ColumnConstraints hgrow="ALWAYS"/></columnConstraints>
                     <Label text="Bakery name" GridPane.rowIndex="0" styleClass="form-label"/>
                     <TextField fx:id="nameField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
                     <Label text="Address" GridPane.rowIndex="1" styleClass="form-label"/>
                     <TextField fx:id="addressField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
                     <Label text="Phone" GridPane.rowIndex="2" styleClass="form-label"/>
                     <TextField fx:id="phoneField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-                    <Label text="Receipt footer" GridPane.rowIndex="3" styleClass="form-label"/>
+                    <Label text="Receipt footer" GridPane.rowIndex="3" styleClass="form-label" GridPane.valignment="TOP"/>
                     <TextArea fx:id="footerField" GridPane.rowIndex="3" GridPane.columnIndex="1" prefRowCount="2"/>
                 </GridPane>
-                <Button text="Save profile" styleClass="primary" onAction="#onSaveProfile"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Save profile" styleClass="primary" onAction="#onSaveProfile">
+                        <graphic><Icon name="check" size="15"/></graphic>
+                    </Button>
+                </HBox>
             </VBox>
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="Alerts and backups" styleClass="card-title"/>
-                <GridPane hgap="10" vgap="8">
-                    <columnConstraints><ColumnConstraints minWidth="210"/><ColumnConstraints hgrow="ALWAYS"/></columnConstraints>
-                    <Label text="Ingredients: warn days before expiry" GridPane.rowIndex="0" styleClass="form-label"/>
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="bell" size="16"/>
+                    <Label text="Alerts and backups" styleClass="card-title"/>
+                </HBox>
+                <Label text="When the dashboard warns, and how many daily backups are kept." styleClass="hint"/>
+                <GridPane styleClass="form-grid">
+                    <columnConstraints><ColumnConstraints minWidth="200" prefWidth="230"/><ColumnConstraints hgrow="ALWAYS"/></columnConstraints>
+                    <Label text="Ingredients: warn days before expiry" GridPane.rowIndex="0" styleClass="form-label" wrapText="true"/>
                     <TextField fx:id="expiryDaysField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-                    <Label text="Products: warn hours before expiry" GridPane.rowIndex="1" styleClass="form-label"/>
+                    <Label text="Products: warn hours before expiry" GridPane.rowIndex="1" styleClass="form-label" wrapText="true"/>
                     <TextField fx:id="expiryHoursField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
                     <Label text="Daily backups to keep" GridPane.rowIndex="2" styleClass="form-label"/>
                     <TextField fx:id="backupsField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
                     <Label text="Time zone" GridPane.rowIndex="3" styleClass="form-label"/>
                     <ComboBox fx:id="zoneBox" GridPane.rowIndex="3" GridPane.columnIndex="1" editable="true" maxWidth="Infinity"/>
                 </GridPane>
-                <Button text="Save thresholds" styleClass="primary" onAction="#onSaveThresholds"/>
-            </VBox>
-        </HBox>
-
-        <VBox styleClass="card">
-            <Label text="Import master data from CSV (dry run first, then all-or-nothing)" styleClass="card-title"/>
-            <Label text="Products: name, sku, category, type (MANUFACTURED/RESALE), price, shelf_life_hours[, description].  Ingredients: code, name, unit (G/ML/PCS), minimum_stock[, tracks_expiry, stock_tracked, notes].  Suppliers: name[, contact_person, phone, email, address, notes]."
-                   styleClass="hint" wrapText="true"/>
-            <FlowPane hgap="8" vgap="8">
-                <Button text="Import products..." onAction="#onImportProducts"/>
-                <Button text="Import ingredients..." onAction="#onImportIngredients"/>
-                <Button text="Import suppliers..." onAction="#onImportSuppliers"/>
-            </FlowPane>
-        </VBox>
-
-        <VBox styleClass="card">
-            <Label text="Export to CSV (opens in Excel / LibreOffice)" styleClass="card-title"/>
-            <FlowPane hgap="8" vgap="8">
-                <Button text="Products" onAction="#onExportProducts"/>
-                <Button text="Ingredients" onAction="#onExportIngredients"/>
-                <Button text="Suppliers" onAction="#onExportSuppliers"/>
-                <Button text="Sales (this month)" onAction="#onExportSales"/>
-                <Button text="Stock ledger (this month)" onAction="#onExportMovements"/>
-                <Button text="Waste (this month)" onAction="#onExportWaste"/>
-            </FlowPane>
-        </VBox>
-
-        <HBox spacing="12">
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="Data integrity check" styleClass="card-title"/>
-                <Label text="Checks the whole data file: unique ids and SKUs, references, stock = sum of ledger movements, sale totals, users."
-                       styleClass="hint" wrapText="true"/>
-                <Button text="Run integrity check" onAction="#onIntegrityCheck"/>
-            </VBox>
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="About Pan-ya Ya" styleClass="card-title"/>
-                <Label fx:id="aboutLabel" wrapText="true" styleClass="mono"/>
-                <HBox spacing="8">
-                    <Button text="Open data folder" onAction="#onOpenData"/>
-                    <Button text="Open log folder" onAction="#onOpenLogs"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <HBox alignment="CENTER_RIGHT">
+                    <Button text="Save thresholds" styleClass="primary" onAction="#onSaveThresholds">
+                        <graphic><Icon name="check" size="15"/></graphic>
+                    </Button>
                 </HBox>
             </VBox>
-        </HBox>
+        </CardGrid>
+
+        <VBox styleClass="panel">
+            <HBox styleClass="panel-header">
+                <Icon name="upload" size="16"/>
+                <Label text="Import master data from CSV" styleClass="card-title"/>
+            </HBox>
+            <Label text="A dry run checks the file first; the import then runs all-or-nothing."
+                   styleClass="hint" wrapText="true"/>
+            <Label text="Products: name, sku, category, type (MANUFACTURED/RESALE), price, shelf_life_hours[, description].  Ingredients: code, name, unit (G/ML/PCS), minimum_stock[, tracks_expiry, stock_tracked, notes].  Suppliers: name[, contact_person, phone, email, address, notes]."
+                   styleClass="banner-info" wrapText="true" maxWidth="Infinity">
+                <graphic><Icon name="info" size="16"/></graphic>
+            </Label>
+            <FlowPane hgap="8" vgap="8">
+                <Button text="Import products..." onAction="#onImportProducts">
+                    <graphic><Icon name="products" size="15"/></graphic>
+                </Button>
+                <Button text="Import ingredients..." onAction="#onImportIngredients">
+                    <graphic><Icon name="ingredients" size="15"/></graphic>
+                </Button>
+                <Button text="Import suppliers..." onAction="#onImportSuppliers">
+                    <graphic><Icon name="supplier" size="15"/></graphic>
+                </Button>
+            </FlowPane>
+        </VBox>
+
+        <VBox styleClass="panel">
+            <HBox styleClass="panel-header">
+                <Icon name="download" size="16"/>
+                <Label text="Export to CSV" styleClass="card-title"/>
+            </HBox>
+            <Label text="Files open in Excel or LibreOffice." styleClass="hint"/>
+            <FlowPane hgap="8" vgap="8">
+                <Button text="Products" onAction="#onExportProducts">
+                    <graphic><Icon name="products" size="15"/></graphic>
+                </Button>
+                <Button text="Ingredients" onAction="#onExportIngredients">
+                    <graphic><Icon name="ingredients" size="15"/></graphic>
+                </Button>
+                <Button text="Suppliers" onAction="#onExportSuppliers">
+                    <graphic><Icon name="supplier" size="15"/></graphic>
+                </Button>
+                <Button text="Sales (this month)" onAction="#onExportSales">
+                    <graphic><Icon name="saleshistory" size="15"/></graphic>
+                </Button>
+                <Button text="Stock ledger (this month)" onAction="#onExportMovements">
+                    <graphic><Icon name="inventory" size="15"/></graphic>
+                </Button>
+                <Button text="Waste (this month)" onAction="#onExportWaste">
+                    <graphic><Icon name="wastemanagement" size="15"/></graphic>
+                </Button>
+            </FlowPane>
+        </VBox>
+
+        <CardGrid minColumnWidth="420" maxColumns="2" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="shield" size="16"/>
+                    <Label text="Data integrity check" styleClass="card-title"/>
+                </HBox>
+                <Label text="Checks the whole data file: unique ids and SKUs, references, stock = sum of ledger movements, sale totals, users."
+                       styleClass="hint" wrapText="true"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <HBox>
+                    <Button text="Run integrity check" onAction="#onIntegrityCheck">
+                        <graphic><Icon name="shield" size="15"/></graphic>
+                    </Button>
+                </HBox>
+            </VBox>
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="info" size="16"/>
+                    <Label text="About Pan-ya Ya" styleClass="card-title"/>
+                </HBox>
+                <Label fx:id="aboutLabel" wrapText="true" styleClass="receipt-text"/>
+                <Region VBox.vgrow="ALWAYS"/>
+                <FlowPane hgap="8" vgap="8">
+                    <Button text="Open data folder" onAction="#onOpenData">
+                        <graphic><Icon name="folder" size="15"/></graphic>
+                    </Button>
+                    <Button text="Open log folder" onAction="#onOpenLogs">
+                        <graphic><Icon name="file-text" size="15"/></graphic>
+                    </Button>
+                </FlowPane>
+            </VBox>
+        </CardGrid>
     </VBox>
 </ScrollPane>

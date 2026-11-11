@@ -67,7 +67,7 @@ public class BackupController extends BaseController {
         shell.tasks().runWithProgress(window(), "Creating backup",
                 progress -> ctx.backups().createBackup(target, "MANUAL", progress),
                 file -> {
-                    Dialogs.info(window(), "Backup created", "Backup verified and saved:\n" + file);
+                    Dialogs.success(window(), "Backup created", "Backup verified and saved:\n" + file);
                     refresh();
                 });
     }
@@ -98,7 +98,7 @@ public class BackupController extends BaseController {
             return;
         }
         shell.tasks().run(window(), () -> ctx.backups().inspect(file),
-                info -> Dialogs.showText(window(), "Backup verified", "✓ Checksum and integrity OK\n\n" + describe(info),
+                info -> Dialogs.showText(window(), "Backup verified", "Checksum and integrity OK.\n\n" + describe(info),
                         null, null));
     }
 
@@ -113,7 +113,7 @@ public class BackupController extends BaseController {
                 ctx.backups().restore(file, progress);
                 return Boolean.TRUE;
             }, ok -> {
-                Dialogs.info(window(), "Restored", "The backup was restored. Please sign in again.");
+                Dialogs.success(window(), "Restored", "The backup was restored. Please sign in again.");
                 shell.signOutWithoutAsking();
             });
         });

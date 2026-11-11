@@ -1,5 +1,6 @@
 package app.panyaya.ui;
 
+import app.panyaya.ui.common.Badge;
 import app.panyaya.exception.ValidationException;
 import app.panyaya.model.Quantities;
 import app.panyaya.model.product.Product;
@@ -79,21 +80,22 @@ public class ProductionController extends BaseController {
                         ? String.valueOf(o.getGoodQuantity()) : "-"),
                 UiUtil.<ProductionOrder>numberColumn("Rejected", 70, o -> o.getStatus() == ProductionStatus.COMPLETED
                         ? String.valueOf(o.getRejectedQuantity()) : "-"),
-                UiUtil.<ProductionOrder>column("Status", 120, o -> UiUtil.statusText(o.getStatus().toString())),
+                UiUtil.<ProductionOrder>badgeColumn("Status", 120, o -> UiUtil.statusText(o.getStatus().toString())),
                 UiUtil.<ProductionOrder>numberColumn("Material cost", 110, o -> o.getStatus() == ProductionStatus.PLANNED
                         || o.getStatus() == ProductionStatus.CANCELLED ? "-" : Formatters.money(o.getMaterialCost())),
                 UiUtil.<ProductionOrder>numberColumn("Cost / pc", 90, o -> o.getStatus() == ProductionStatus.COMPLETED
                         ? Formatters.money(o.getUnitCost()) : "-")));
-        UiUtil.placeholder(table, "No production orders. Click \"+ Plan production\" to plan a bake.");
+        UiUtil.placeholder(table, "No production orders. Click \"Plan production\" to plan a bake.");
         table.getSelectionModel().selectedItemProperty().addListener((obs, old, order) -> showDetail(order));
 
         detailTable.getColumns().setAll(Arrays.asList(
                 UiUtil.<DetailRow>column("Ingredient", 220, r -> r.ingredient),
                 UiUtil.<DetailRow>numberColumn("Quantity", 120, r -> r.required),
                 UiUtil.<DetailRow>numberColumn("Usable in stock", 130, r -> r.available),
-                UiUtil.<DetailRow>column("Check", 200, r -> r.status),
+                UiUtil.<DetailRow>badgeColumn("Check", 200, r -> r.status),
                 UiUtil.<DetailRow>numberColumn("Cost", 110, r -> r.cost)));
 
+        UiUtil.placeholder(detailTable, "Select an order to see the ingredients it needs or used.");
         UiUtil.allOption(statusFilter, "All statuses", Arrays.asList(ProductionStatus.values()));
         statusFilter.setOnAction(e -> refresh());
     }
@@ -142,7 +144,7 @@ public class ProductionController extends BaseController {
             detailInfo.setText(info);
             for (MaterialUsage usage : order.getMaterials()) {
                 rows.add(new DetailRow(usage.getIngredientName(), Formatters.quantity(usage.getQuantity(), usage.getUnit()),
-                        "", usage.isStockTracked() ? "✓ used (FEFO)" : "not stock-tracked",
+                        "", usage.isStockTracked() ? "Used (FEFO)" : "Not stock-tracked",
                         Formatters.money(usage.getCost())));
             }
         }
@@ -152,11 +154,11 @@ public class ProductionController extends BaseController {
     private static DetailRow requirementRow(MaterialRequirement r) {
         String check;
         if (!r.isStockTracked()) {
-            check = "not stock-tracked";
+            check = "Not stock-tracked";
         } else if (r.isShort()) {
-            check = "✖ short by " + Formatters.quantity(r.getShortfall(), r.getUnit());
+            check = "Short by " + Formatters.quantity(r.getShortfall(), r.getUnit());
         } else {
-            check = "✓ enough";
+            check = "Enough";
         }
         return new DetailRow(r.getIngredientName(), Formatters.quantity(r.getRequired(), r.getUnit()),
                 r.isStockTracked() ? Formatters.quantity(r.getAvailable(), r.getUnit()) : "-", check,
@@ -186,21 +188,21 @@ public class ProductionController extends BaseController {
         DatePicker date = form.add("Bake on *", new DatePicker(LocalDate.ofInstant(ctx.getClock().instant(),
                 ctx.settings().getSettings().zone())));
         Label check = new Label();
-        check.setWrapText(true);
+        UiUtil.notice(check, Badge.Tone.INFO, "");
         form.addWide(check);
         TableView<DetailRow> preview = new TableView<>();
         preview.getColumns().setAll(Arrays.asList(
                 UiUtil.<DetailRow>column("Ingredient", 200, r -> r.ingredient),
                 UiUtil.<DetailRow>numberColumn("Needed", 110, r -> r.required),
                 UiUtil.<DetailRow>numberColumn("Usable", 110, r -> r.available),
-                UiUtil.<DetailRow>column("Check", 170, r -> r.status)));
+                UiUtil.<DetailRow>badgeColumn("Check", 170, r -> r.status)));
         preview.setPrefHeight(180);
         UiUtil.placeholder(preview, "Choose a product, an active recipe and a quantity.");
         form.addWide(preview);
 
         Runnable updatePreview = () -> {
             preview.getItems().clear();
-            check.setText("");
+            UiUtil.notice(check, Badge.Tone.INFO, "");
             if (recipe.getValue() == null) {
                 return;
             }
@@ -215,9 +217,12 @@ public class ProductionController extends BaseController {
                         shortCount++;
                     }
                 }
-                check.setText(shortCount == 0 ? "✓ Enough stock right now."
-                        : "⚠ " + shortCount + " ingredient(s) short today. You can still plan; Start will be refused "
-                        + "until the stock is received.");
+                if (shortCount == 0) {
+                    UiUtil.notice(check, Badge.Tone.SUCCESS, "Enough stock right now.");
+                } else {
+                    UiUtil.notice(check, Badge.Tone.WARNING, shortCount + " ingredient(s) short today. You can still "
+                            + "plan; Start will be refused until the stock is received.");
+                }
             } catch (ValidationException ignored) {
                 // quantity not typed yet
             }
@@ -229,8 +234,8 @@ public class ProductionController extends BaseController {
                 if (!recipe.getItems().isEmpty()) {
                     recipe.setValue(recipe.getItems().get(0));
                 } else {
-                    check.setText("⚠ \"" + product.getValue().getName() + "\" has no ACTIVE recipe. "
-                            + "Create or activate one on the Recipes screen first.");
+                    UiUtil.notice(check, Badge.Tone.WARNING, "\"" + product.getValue().getName() + "\" has no ACTIVE "
+                            + "recipe. Create or activate one on the Recipes screen first.");
                 }
             }
             updatePreview.run();

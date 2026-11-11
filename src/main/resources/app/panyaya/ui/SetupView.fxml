@@ -1,33 +1,74 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
-<StackPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-           fx:controller="app.panyaya.ui.SetupController" styleClass="auth-background">
-    <VBox styleClass="auth-card" maxWidth="460" maxHeight="-Infinity" spacing="8">
-        <Label text="パン屋ヤ" styleClass="brand-jp"/>
-        <Label text="Welcome! Let's set up your bakery." styleClass="section-title"/>
-        <Label text="This creates the Owner account. No default password exists - choose your own."
-               styleClass="hint" wrapText="true"/>
-        <Label text="Bakery name" styleClass="form-label"/>
-        <TextField fx:id="bakeryField" promptText="e.g. Toko Roti Sari"/>
-        <Label text="Owner username" styleClass="form-label"/>
-        <TextField fx:id="usernameField" promptText="3-20 letters or digits, e.g. owner"/>
-        <Label text="Owner display name" styleClass="form-label"/>
-        <TextField fx:id="displayNameField" promptText="e.g. Ibu Sari"/>
-        <Label text="Password (at least 8 characters)" styleClass="form-label"/>
-        <PasswordField fx:id="passwordField"/>
-        <Label text="Repeat password" styleClass="form-label"/>
-        <PasswordField fx:id="repeatField"/>
-        <CheckBox fx:id="starterCheck" text="Add starter recipe templates (examples to review and edit)" selected="true"/>
-        <Label fx:id="errorLabel" styleClass="form-error" wrapText="true" maxWidth="Infinity" managed="false" visible="false"/>
-        <Button fx:id="createButton" text="Create bakery" defaultButton="true" maxWidth="Infinity" styleClass="primary"
-                onAction="#onCreate"/>
-    </VBox>
-</StackPane>
+<ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="app.panyaya.ui.SetupController" fitToWidth="true" fitToHeight="true"
+            styleClass="form-scroll">
+    <StackPane styleClass="auth-root, centered-page">
+        <VBox styleClass="auth-card" maxWidth="560" maxHeight="-Infinity" spacing="18">
+            <HBox styleClass="auth-brand-row">
+                <ImageView fitWidth="40" fitHeight="40" preserveRatio="true" smooth="true">
+                    <Image url="@img/icon-64.png"/>
+                </ImageView>
+                <VBox>
+                    <Label text="パン屋ヤ" styleClass="brand-jp-small"/>
+                    <Label text="PAN-YA YA  ·  BAKERY OPERATIONS" styleClass="brand-latin"/>
+                </VBox>
+            </HBox>
+            <VBox spacing="4">
+                <Label text="Set up your bakery" styleClass="auth-title"/>
+                <Label text="This creates the Owner account. There is no default password - choose your own."
+                       styleClass="auth-subtitle" wrapText="true"/>
+            </VBox>
+            <Region styleClass="divider"/>
+            <GridPane styleClass="form-grid">
+                <columnConstraints>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                    <ColumnConstraints hgrow="ALWAYS" percentWidth="50"/>
+                </columnConstraints>
+                <VBox styleClass="field-group" GridPane.columnSpan="2">
+                    <Label text="Bakery name" styleClass="form-label"/>
+                    <TextField fx:id="bakeryField" promptText="e.g. Toko Roti Sari"/>
+                </VBox>
+                <VBox styleClass="field-group" GridPane.rowIndex="1">
+                    <Label text="Owner username" styleClass="form-label"/>
+                    <TextField fx:id="usernameField" promptText="3-20 letters or digits"/>
+                </VBox>
+                <VBox styleClass="field-group" GridPane.rowIndex="1" GridPane.columnIndex="1">
+                    <Label text="Owner display name" styleClass="form-label"/>
+                    <TextField fx:id="displayNameField" promptText="e.g. Ibu Sari"/>
+                </VBox>
+                <VBox styleClass="field-group" GridPane.rowIndex="2">
+                    <Label text="Password" styleClass="form-label"/>
+                    <PasswordField fx:id="passwordField" promptText="at least 8 characters"/>
+                </VBox>
+                <VBox styleClass="field-group" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                    <Label text="Repeat password" styleClass="form-label"/>
+                    <PasswordField fx:id="repeatField"/>
+                </VBox>
+            </GridPane>
+            <CheckBox fx:id="starterCheck" text="Add starter recipe templates (examples to review and edit)" selected="true"
+                      wrapText="true"/>
+            <Label fx:id="errorLabel" styleClass="form-error" wrapText="true" maxWidth="Infinity" managed="false" visible="false">
+                <graphic><Icon name="x-circle" size="16"/></graphic>
+            </Label>
+            <Button fx:id="createButton" text="Create bakery" defaultButton="true" maxWidth="Infinity" styleClass="primary"
+                    onAction="#onCreate"/>
+        </VBox>
+    </StackPane>
+</ScrollPane>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -9,6 +10,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -16,27 +18,37 @@
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="app.panyaya.ui.ReportsController" styleClass="view">
     <HBox styleClass="toolbar">
-        <ComboBox fx:id="reportBox" prefWidth="220"/>
-        <ComboBox fx:id="presetBox" prefWidth="140"/>
-        <DatePicker fx:id="fromPicker" prefWidth="130"/>
-        <Label text="to"/>
-        <DatePicker fx:id="toPicker" prefWidth="130"/>
-        <Button fx:id="generateButton" text="Generate" styleClass="primary" onAction="#onGenerate"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="exportButton" text="Export CSV..." onAction="#onExport"/>
+        <ComboBox fx:id="reportBox" prefWidth="230" minWidth="150"/>
+        <ComboBox fx:id="presetBox" prefWidth="140" minWidth="110"/>
+        <DatePicker fx:id="fromPicker" prefWidth="140" minWidth="120"/>
+        <Label text="to" styleClass="field-label" minWidth="-Infinity"/>
+        <DatePicker fx:id="toPicker" prefWidth="140" minWidth="120"/>
+        <Button fx:id="generateButton" text="Generate" styleClass="primary" onAction="#onGenerate" minWidth="-Infinity">
+            <graphic><Icon name="reports" size="15"/></graphic>
+        </Button>
+        <Region HBox.hgrow="ALWAYS" minWidth="8"/>
+        <Button fx:id="exportButton" text="Export CSV" onAction="#onExport">
+            <graphic><Icon name="download" size="15"/></graphic>
+        </Button>
     </HBox>
-    <Label fx:id="descriptionLabel" styleClass="hint" wrapText="true"/>
-    <SplitPane orientation="VERTICAL" dividerPositions="0.6" VBox.vgrow="ALWAYS">
-        <VBox spacing="6">
-            <Label fx:id="titleLabel" styleClass="section-title"/>
+    <Label fx:id="descriptionLabel" styleClass="banner-info" wrapText="true" maxWidth="Infinity">
+        <graphic><Icon name="info" size="16"/></graphic>
+    </Label>
+    <SplitPane orientation="VERTICAL" dividerPositions="0.58" VBox.vgrow="ALWAYS">
+        <VBox spacing="10" minHeight="180">
+            <Label fx:id="titleLabel" styleClass="section-title" wrapText="true"/>
             <TableView fx:id="table" VBox.vgrow="ALWAYS"/>
-            <VBox fx:id="summaryBox" spacing="2"/>
+            <FlowPane fx:id="summaryBox" styleClass="report-summary"/>
         </VBox>
-        <VBox styleClass="card">
-            <Label fx:id="chartTitle" styleClass="card-title"/>
-            <BarChart fx:id="chart" legendVisible="false" animated="false" VBox.vgrow="ALWAYS">
-                <xAxis><CategoryAxis/></xAxis>
-                <yAxis><NumberAxis/></yAxis>
+        <VBox styleClass="panel" minHeight="180">
+            <HBox styleClass="panel-header">
+                <Icon name="saleshistory" size="16"/>
+                <Label fx:id="chartTitle" styleClass="card-title"/>
+            </HBox>
+            <BarChart fx:id="chart" legendVisible="false" animated="false" VBox.vgrow="ALWAYS"
+                      verticalGridLinesVisible="false" alternativeRowFillVisible="false" categoryGap="10">
+                <xAxis><CategoryAxis tickLabelGap="6"/></xAxis>
+                <yAxis><NumberAxis minorTickVisible="false" tickLabelGap="8"/></yAxis>
             </BarChart>
         </VBox>
     </SplitPane>

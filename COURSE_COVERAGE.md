@@ -151,7 +151,7 @@ backup and open the `.panyabak` with 7-Zip to see `manifest.json`; truncate the 
 ## 12. Java GUI
 
 16 FXML screens in `src/main/resources/app/panyaya/ui/` with controllers in `ui/`, one CSS theme
-(`ui/css/panyaya.css`), JavaFX `BarChart`/`PieChart` (dashboard, reports), `TableView`, `TabPane`,
+(`ui/css/panyaya.css`), JavaFX `BarChart` (dashboard, reports), `TableView`, `TabPane`,
 `SplitPane`, dialogs (`ui/common/FormDialog`, `Dialogs`). Controllers only call services;
 business rules and file access are not in the UI.
 

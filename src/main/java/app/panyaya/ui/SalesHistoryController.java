@@ -49,13 +49,13 @@ public class SalesHistoryController extends BaseController {
     @Override
     protected void setUp() {
         table.getColumns().setAll(Arrays.asList(
-                UiUtil.<Sale>column("Time", 130, s -> Formatters.dateTime(s.getOccurredAt(), ctx.settings().getSettings().zone())),
+                UiUtil.<Sale>column("Time", 150, s -> Formatters.dateTime(s.getOccurredAt(), ctx.settings().getSettings().zone())),
                 UiUtil.<Sale>column("Sale no.", 150, Sale::getSaleNo),
-                UiUtil.<Sale>column("Cashier", 110, Sale::getCashierName),
+                UiUtil.<Sale>column("Cashier", 140, Sale::getCashierName),
                 UiUtil.<Sale>numberColumn("Items", 60, s -> String.valueOf(s.getItemCount())),
                 UiUtil.<Sale>numberColumn("Total", 110, s -> Formatters.money(s.getTotal())),
                 UiUtil.<Sale>column("Payment", 110, s -> String.valueOf(s.getPaymentMethod())),
-                UiUtil.<Sale>column("Status", 110, s -> UiUtil.statusText(s.getStatus().toString()))));
+                UiUtil.<Sale>badgeColumn("Status", 110, s -> UiUtil.statusText(s.getStatus().toString()))));
         UiUtil.placeholder(table, "No sales in this period.");
         table.getSelectionModel().selectedItemProperty().addListener((obs, old, sale) ->
                 receiptArea.setText(sale == null ? "" : ctx.sales().receiptText(sale)));

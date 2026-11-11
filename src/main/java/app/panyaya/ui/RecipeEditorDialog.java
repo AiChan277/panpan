@@ -198,7 +198,7 @@ final class RecipeEditorDialog {
             // yield not typed yet
         }
         if (!unknown.isEmpty()) {
-            text += "\n⚠ Cost unknown (never received): " + String.join(", ", unknown) + " - estimate incomplete.";
+            text += "\nCost unknown (never received): " + String.join(", ", unknown) + " - estimate incomplete.";
         }
         label.setText(text);
     }

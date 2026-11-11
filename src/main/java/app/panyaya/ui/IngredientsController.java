@@ -53,9 +53,10 @@ public class IngredientsController extends BaseController {
                         s -> Formatters.quantity(s.getUsableQuantity(), s.getIngredient().getBaseUnit())),
                 UiUtil.<IngredientStock>numberColumn("Minimum", 100,
                         s -> Formatters.quantity(s.getIngredient().getMinimumStock(), s.getIngredient().getBaseUnit())),
-                UiUtil.<IngredientStock>column("Status", 120, s -> UiUtil.statusText(s.getStatus().toString())),
-                UiUtil.<IngredientStock>numberColumn("Expired (write off)", 130, s -> s.getExpiredQuantity().signum() == 0
-                        ? "-" : "✖ " + Formatters.quantity(s.getExpiredQuantity(), s.getIngredient().getBaseUnit())),
+                UiUtil.<IngredientStock>badgeColumn("Status", 120, s -> UiUtil.statusText(s.getStatus().toString())),
+                UiUtil.highlight(UiUtil.<IngredientStock>numberColumn("Expired (write off)", 130, s -> s.getExpiredQuantity().signum() == 0
+                        ? "-" : Formatters.quantity(s.getExpiredQuantity(), s.getIngredient().getBaseUnit())),
+                        value -> !"-".equals(value), "text-danger"),
                 UiUtil.<IngredientStock>column("Nearest expiry", 120, s -> Formatters.date(s.getNearestExpiry())),
                 UiUtil.<IngredientStock>numberColumn("Value", 110, s -> Formatters.money(s.getValue()))));
         UiUtil.placeholder(table, "No ingredients yet. Add flour, butter, sugar... or import the starter templates.");
@@ -73,8 +74,8 @@ public class IngredientsController extends BaseController {
                 UiUtil.<IngredientLot>numberColumn("Initial", 100, l -> Formatters.quantity(l.getInitialQuantity())),
                 UiUtil.<IngredientLot>numberColumn("Remaining", 100, l -> Formatters.quantity(l.getRemainingQuantity())),
                 UiUtil.<IngredientLot>numberColumn("Cost / unit", 100, l -> Formatters.unitCost(l.getUnitCost())),
-                UiUtil.<IngredientLot>column("State", 110, l -> l.isDepleted() ? "Used up"
-                        : l.isExpiredAt(ctx.getClock().instant(), zone()) ? "✖ Expired" : "✓ Usable")));
+                UiUtil.<IngredientLot>badgeColumn("State", 110, l -> l.isDepleted() ? "Used up"
+                        : l.isExpiredAt(ctx.getClock().instant(), zone()) ? "Expired" : "Usable")));
         UiUtil.placeholder(lotsTable, "Select an ingredient to see its lots (FEFO: the earliest expiry is used first).");
         searchField.textProperty().addListener((obs, old, text) -> refresh());
         inactiveCheck.setOnAction(e -> refresh());
@@ -95,7 +96,7 @@ public class IngredientsController extends BaseController {
         List<IngredientStock> rows = ctx.ingredients().stockOverview(searchField.getText(), inactiveCheck.isSelected());
         UiUtil.setItems(table, rows);
         long attention = rows.stream().filter(IngredientStock::needsAttention).count();
-        summaryLabel.setText(rows.size() + " ingredient(s)" + (attention > 0 ? " · ⚠ " + attention + " low or out" : ""));
+        summaryLabel.setText(rows.size() + " ingredient(s)" + (attention > 0 ? "  ·  " + attention + " low or out of stock" : ""));
         showLots(table.getSelectionModel().getSelectedItem());
     }
 

@@ -1,5 +1,6 @@
 package app.panyaya.ui;
 
+import app.panyaya.ui.common.Badge;
 import app.panyaya.model.product.Product;
 import app.panyaya.model.recipe.Recipe;
 import app.panyaya.model.recipe.RecipeItem;
@@ -69,7 +70,7 @@ public class RecipesController extends BaseController {
                 UiUtil.<Recipe>column("Recipe", 210, Recipe::getName),
                 UiUtil.<Recipe>column("Product", 170, r -> productName(r.getProductId())),
                 UiUtil.<Recipe>numberColumn("Yield", 60, r -> Formatters.quantity(r.getYieldQuantity())),
-                UiUtil.<Recipe>column("Status", 100, r -> UiUtil.statusText(r.getStatus().toString())
+                UiUtil.<Recipe>badgeColumn("Status", 130, r -> UiUtil.statusText(r.getStatus().toString())
                         + (r.isTemplate() ? " (template)" : "")),
                 UiUtil.<Recipe>numberColumn("Ver.", 50, r -> String.valueOf(r.getVersion()))));
         UiUtil.placeholder(table, "No recipes yet. Create one, or import the starter templates and adjust them.");
@@ -84,14 +85,15 @@ public class RecipesController extends BaseController {
                 UiUtil.<RecipeItem>numberColumn("Quantity", 90, i -> Formatters.quantity(i.getQuantity())),
                 UiUtil.<RecipeItem>column("Unit", 60, i -> i.getUnit().getSymbol()),
                 UiUtil.<RecipeItem>column("Note", 160, RecipeItem::getNote)));
+        UiUtil.placeholder(itemsTable, "Select a recipe to see its ingredients.");
         requirementsTable.getColumns().setAll(Arrays.asList(
                 UiUtil.<MaterialRequirement>column("Ingredient", 190, MaterialRequirement::getIngredientName),
                 UiUtil.<MaterialRequirement>numberColumn("Required", 110,
                         r -> Formatters.quantity(r.getRequired(), r.getUnit())),
                 UiUtil.<MaterialRequirement>numberColumn("In stock", 110, r -> r.isStockTracked()
                         ? Formatters.quantity(r.getAvailable(), r.getUnit()) : "not tracked"),
-                UiUtil.<MaterialRequirement>numberColumn("Short", 100, r -> r.isShort()
-                        ? "✖ " + Formatters.quantity(r.getShortfall(), r.getUnit()) : "✓"),
+                UiUtil.highlight(UiUtil.<MaterialRequirement>numberColumn("Short", 100, r -> r.isShort()
+                        ? Formatters.quantity(r.getShortfall(), r.getUnit()) : "-"), value -> !"-".equals(value), "text-danger"),
                 UiUtil.<MaterialRequirement>numberColumn("Est. cost", 100, r -> r.getEstimatedCost() == null
                         ? "unknown" : Formatters.money(r.getEstimatedCost()))));
         UiUtil.placeholder(requirementsTable, "Enter a number of pieces and press Calculate.");
@@ -117,11 +119,11 @@ public class RecipesController extends BaseController {
 
     private void showDetails(Recipe recipe) {
         requirementsTable.getItems().clear();
-        scaleLabel.setText("");
+        UiUtil.notice(scaleLabel, Badge.Tone.INFO, "");
         if (recipe == null) {
             titleLabel.setText("Select a recipe");
             infoLabel.setText("");
-            costLabel.setText("");
+            UiUtil.notice(costLabel, Badge.Tone.INFO, "");
             instructionsLabel.setText("");
             itemsTable.getItems().clear();
             templateBanner.setVisible(false);
@@ -144,10 +146,10 @@ public class RecipesController extends BaseController {
             cost += " (selling price " + Formatters.money(product.getSellingPrice()) + ")";
         }
         if (!estimate.isComplete()) {
-            cost += "\n⚠ Cost unknown for: " + String.join(", ", estimate.getUnknownCostIngredients())
+            cost += "\nCost unknown for: " + String.join(", ", estimate.getUnknownCostIngredients())
                     + " (never received) - the estimate is incomplete.";
         }
-        costLabel.setText(cost);
+        UiUtil.notice(costLabel, estimate.isComplete() ? Badge.Tone.INFO : Badge.Tone.WARNING, cost);
         instructionsLabel.setText(recipe.getInstructions() == null || recipe.getInstructions().isEmpty()
                 ? "-" : recipe.getInstructions());
     }
@@ -175,8 +177,12 @@ public class RecipesController extends BaseController {
             java.math.BigDecimal target = NumberParser.parseQuantity(targetField.getText(), "Pieces");
             requirementsTable.getItems().setAll(ctx.recipes().calculateRequirements(recipe, target));
             long shortCount = requirementsTable.getItems().stream().filter(MaterialRequirement::isShort).count();
-            scaleLabel.setText(shortCount == 0 ? "✓ Enough stock for " + Formatters.quantity(target) + " pieces"
-                    : "⚠ " + shortCount + " ingredient(s) short");
+            if (shortCount == 0) {
+                UiUtil.notice(scaleLabel, Badge.Tone.SUCCESS, "Enough stock for " + Formatters.quantity(target) + " pieces.");
+            } else {
+                UiUtil.notice(scaleLabel, Badge.Tone.WARNING, shortCount + " ingredient(s) short for "
+                        + Formatters.quantity(target) + " pieces.");
+            }
         } catch (Exception e) {
             Dialogs.error(window(), e);
         }
@@ -245,8 +251,8 @@ public class RecipesController extends BaseController {
     @FXML
     private void onArchive() {
         Recipe recipe = selected("Archive recipe");
-        if (recipe != null && Dialogs.confirm(window(), "Archive recipe",
-                "Archive \"" + recipe.getName() + "\"? It can no longer be used for new production.")) {
+        if (recipe != null && Dialogs.confirmDanger(window(), "Archive recipe",
+                "Archive \"" + recipe.getName() + "\"? It can no longer be used for new production.", "Archive")) {
             attempt(() -> ctx.recipes().archive(recipe.getId()));
         }
     }
@@ -259,7 +265,7 @@ public class RecipesController extends BaseController {
                         + "with example quantities that you must review.")) {
             attempt(() -> {
                 int count = ctx.seed().importStarterRecipes();
-                Dialogs.info(window(), "Starter templates", count + " template recipe(s) imported as Draft.");
+                Dialogs.success(window(), "Starter templates", count + " template recipe(s) imported as Draft.");
             });
         }
     }

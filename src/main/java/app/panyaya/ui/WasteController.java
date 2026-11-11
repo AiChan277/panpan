@@ -121,10 +121,10 @@ public class WasteController extends BaseController {
                 UiUtil.<FinishedGoodsBatch>numberColumn("Left", 50, b -> Formatters.quantity(b.getRemainingQuantity())),
                 UiUtil.<FinishedGoodsBatch>numberColumn("Loss", 90, b -> Formatters.money(b.getRemainingValue()))));
         endOfDayTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        UiUtil.placeholder(endOfDayTable, "✓ Nothing to write off tonight.");
+        endOfDayTable.setPlaceholder(UiUtil.allClear("Nothing to write off tonight."));
 
         historyTable.getColumns().setAll(Arrays.asList(
-                UiUtil.<WasteRecord>column("Time", 130, w -> Formatters.dateTime(w.getOccurredAt(), zone())),
+                UiUtil.<WasteRecord>column("Time", 150, w -> Formatters.dateTime(w.getOccurredAt(), zone())),
                 UiUtil.<WasteRecord>column("No.", 140, WasteRecord::getWasteNo),
                 UiUtil.<WasteRecord>column("Kind", 80, w -> w.getStockKind().toString()),
                 UiUtil.<WasteRecord>column("Item", 180, WasteRecord::getItemName),
@@ -209,15 +209,15 @@ public class WasteController extends BaseController {
     private void updateLoss() {
         LotChoice choice = lotBox.getValue();
         if (choice == null) {
-            lossLabel.setText("Estimated loss: -");
+            lossLabel.setText("-");
             return;
         }
         try {
             BigDecimal quantity = NumberParser.parseQuantity(quantityField.getText(), "Quantity");
-            lossLabel.setText("Estimated loss: " + Formatters.money(
+            lossLabel.setText(Formatters.money(
                     ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)));
         } catch (ValidationException e) {
-            lossLabel.setText("Estimated loss: -");
+            lossLabel.setText("-");
         }
     }
 
@@ -231,9 +231,10 @@ public class WasteController extends BaseController {
         try {
             BigDecimal quantity = NumberParser.parseQuantity(quantityField.getText(), "Quantity");
             String item = itemBox.getValue().name;
-            if (!Dialogs.confirm(window(), "Record waste", "Write off " + Formatters.quantity(quantity) + " of " + item
+            if (!Dialogs.confirmDanger(window(), "Record waste", "Write off " + Formatters.quantity(quantity) + " of " + item
                     + " (" + reasonBox.getValue() + ")?\nEstimated loss: "
-                    + Formatters.money(ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)))) {
+                    + Formatters.money(ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)),
+                    "Record waste")) {
                 return;
             }
             boolean ok = attempt(() -> {
@@ -267,8 +268,8 @@ public class WasteController extends BaseController {
             ids.add(batch.getId());
             loss = loss.add(batch.getRemainingValue());
         }
-        if (Dialogs.confirm(window(), "End-of-day write-off", "Write off " + ids.size() + " batch(es) in one step?\n"
-                + "Estimated loss: " + Formatters.money(loss))) {
+        if (Dialogs.confirmDanger(window(), "End-of-day write-off", "Write off " + ids.size() + " batch(es) in one step?\n"
+                + "Estimated loss: " + Formatters.money(loss), "Write off")) {
             attempt(() -> ctx.waste().writeOffEndOfDay(ids));
         }
     }

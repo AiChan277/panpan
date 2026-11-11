@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.ComboBox?>
@@ -12,51 +13,68 @@
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="app.panyaya.ui.InventoryController" styleClass="view">
-    <HBox styleClass="toolbar">
-        <Label text="Every stock change is a ledger entry: receipts, production use, sales, voids, waste and adjustments."
-               styleClass="hint"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="receiveButton" text="Receive goods" styleClass="primary" onAction="#onReceive"/>
-        <Button fx:id="adjustButton" text="Adjust selected lot" onAction="#onAdjust"/>
-    </HBox>
-    <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE" VBox.vgrow="ALWAYS">
-        <Tab text="Ingredient lots">
-            <VBox spacing="8" style="-fx-padding: 8 0 0 0;">
-                <CheckBox fx:id="emptyLotsCheck" text="Include used-up lots"/>
-                <TableView fx:id="lotsTable" VBox.vgrow="ALWAYS"/>
-            </VBox>
-        </Tab>
-        <Tab text="Finished goods">
-            <VBox spacing="8" style="-fx-padding: 8 0 0 0;">
-                <CheckBox fx:id="emptyBatchesCheck" text="Include sold-out batches"/>
-                <TableView fx:id="batchesTable" VBox.vgrow="ALWAYS"/>
-            </VBox>
-        </Tab>
-        <Tab text="Stock ledger">
-            <VBox spacing="8" style="-fx-padding: 8 0 0 0;">
-                <HBox styleClass="toolbar">
-                    <ComboBox fx:id="kindFilter" prefWidth="150"/>
-                    <Label text="From"/>
-                    <DatePicker fx:id="fromPicker" prefWidth="130"/>
-                    <Label text="to"/>
-                    <DatePicker fx:id="toPicker" prefWidth="130"/>
-                    <Button text="Show" onAction="#onShowLedger"/>
-                    <Region HBox.hgrow="ALWAYS"/>
-                    <Label fx:id="ledgerCount" styleClass="hint"/>
-                    <Button text="Export CSV..." onAction="#onExportLedger"/>
-                </HBox>
-                <TableView fx:id="ledgerTable" VBox.vgrow="ALWAYS"/>
-            </VBox>
-        </Tab>
-        <Tab text="Goods receipts">
-            <SplitPane dividerPositions="0.6" style="-fx-padding: 8 0 0 0;">
-                <TableView fx:id="receiptsTable"/>
-                <TextArea fx:id="receiptDetail" editable="false" styleClass="mono" wrapText="true"/>
-            </SplitPane>
-        </Tab>
-    </TabPane>
+    <!-- the page actions sit on the tab row, so the tables keep their height -->
+    <StackPane VBox.vgrow="ALWAYS">
+        <TabPane fx:id="tabs" tabClosingPolicy="UNAVAILABLE">
+            <Tab text="Ingredient lots">
+                <VBox spacing="10">
+                    <CheckBox fx:id="emptyLotsCheck" text="Include used-up lots"/>
+                    <TableView fx:id="lotsTable" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+            <Tab text="Finished goods">
+                <VBox spacing="10">
+                    <CheckBox fx:id="emptyBatchesCheck" text="Include sold-out batches"/>
+                    <TableView fx:id="batchesTable" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+            <Tab text="Stock ledger">
+                <VBox spacing="10">
+                    <HBox styleClass="toolbar">
+                        <ComboBox fx:id="kindFilter" prefWidth="150" minWidth="110"/>
+                        <Label text="From" styleClass="field-label" minWidth="-Infinity"/>
+                        <DatePicker fx:id="fromPicker" prefWidth="140" minWidth="120"/>
+                        <Label text="to" styleClass="field-label" minWidth="-Infinity"/>
+                        <DatePicker fx:id="toPicker" prefWidth="140" minWidth="120"/>
+                        <Button text="Show" onAction="#onShowLedger" styleClass="keep-label">
+                            <graphic><Icon name="search" size="15"/></graphic>
+                        </Button>
+                        <Region HBox.hgrow="ALWAYS" minWidth="8"/>
+                        <Label fx:id="ledgerCount" styleClass="hint" minWidth="-Infinity"/>
+                        <Button text="Export CSV" onAction="#onExportLedger">
+                            <graphic><Icon name="download" size="15"/></graphic>
+                        </Button>
+                    </HBox>
+                    <TableView fx:id="ledgerTable" VBox.vgrow="ALWAYS"/>
+                </VBox>
+            </Tab>
+            <Tab text="Goods receipts">
+                <SplitPane dividerPositions="0.6">
+                    <TableView fx:id="receiptsTable" minWidth="320"/>
+                    <VBox styleClass="panel" minWidth="260">
+                        <HBox styleClass="panel-header">
+                            <Icon name="receipt" size="16"/>
+                            <Label text="Receipt details" styleClass="card-title"/>
+                        </HBox>
+                        <TextArea fx:id="receiptDetail" editable="false" styleClass="receipt-text" wrapText="true"
+                                  VBox.vgrow="ALWAYS" promptText="Select a goods receipt to see its lines."/>
+                    </VBox>
+                </SplitPane>
+            </Tab>
+        </TabPane>
+        <HBox styleClass="toolbar" StackPane.alignment="TOP_RIGHT" maxWidth="-Infinity" maxHeight="-Infinity"
+              pickOnBounds="false">
+            <Button fx:id="adjustButton" text="Adjust selected lot" onAction="#onAdjust">
+                <graphic><Icon name="sliders" size="15"/></graphic>
+            </Button>
+            <Button fx:id="receiveButton" text="Receive goods" styleClass="primary" onAction="#onReceive" minWidth="-Infinity">
+                <graphic><Icon name="supplier" size="15"/></graphic>
+            </Button>
+        </HBox>
+    </StackPane>
 </VBox>

@@ -1,45 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
 <HBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="app.panyaya.ui.PosController" spacing="14">
-    <VBox spacing="10" HBox.hgrow="ALWAYS">
-        <TextField fx:id="searchField" styleClass="pos-search"
-                   promptText="F2  Search name / type or scan SKU, Enter adds the first match"/>
+      fx:controller="app.panyaya.ui.PosController" spacing="16">
+    <VBox spacing="10" HBox.hgrow="ALWAYS" minWidth="320">
+        <HBox styleClass="search-box, large">
+            <Icon name="search" size="18"/>
+            <TextField fx:id="searchField" HBox.hgrow="ALWAYS"
+                       promptText="Search name or scan SKU - Enter adds the first match"/>
+        </HBox>
         <Label fx:id="tileInfo" styleClass="hint"/>
         <ScrollPane fitToWidth="true" styleClass="form-scroll" VBox.vgrow="ALWAYS">
             <FlowPane fx:id="tilePane" hgap="10" vgap="10"/>
         </ScrollPane>
     </VBox>
     <VBox styleClass="cart-panel">
-        <HBox styleClass="toolbar">
-            <Label text="Cart" styleClass="section-title"/>
+        <HBox styleClass="panel-header">
+            <Icon name="receipt" size="16"/>
+            <Label text="Current sale" styleClass="card-title"/>
             <Region HBox.hgrow="ALWAYS"/>
-            <Label fx:id="itemCountLabel" styleClass="muted"/>
+            <Label fx:id="itemCountLabel" styleClass="count-pill"/>
         </HBox>
         <TableView fx:id="cartTable" VBox.vgrow="ALWAYS"/>
-        <HBox spacing="6">
-            <Button text="−" onAction="#onMinus" prefWidth="44"/>
-            <Button text="+" onAction="#onPlus" prefWidth="44"/>
-            <Button text="Remove (Del)" onAction="#onRemove"/>
+        <HBox spacing="6" alignment="CENTER_LEFT">
+            <Button onAction="#onMinus" styleClass="square">
+                <graphic><Icon name="minus" size="15"/></graphic>
+                <tooltip><Tooltip text="One less of the selected line ( - )"/></tooltip>
+            </Button>
+            <Button onAction="#onPlus" styleClass="square">
+                <graphic><Icon name="plus" size="15"/></graphic>
+                <tooltip><Tooltip text="One more of the selected line ( + )"/></tooltip>
+            </Button>
+            <Button text="Remove" onAction="#onRemove">
+                <graphic><Icon name="close" size="14"/></graphic>
+            </Button>
             <Region HBox.hgrow="ALWAYS"/>
-            <Button text="Clear" styleClass="danger" onAction="#onClear"/>
+            <Button text="Clear" styleClass="danger" onAction="#onClear">
+                <graphic><Icon name="ban" size="14"/></graphic>
+            </Button>
         </HBox>
-        <HBox styleClass="toolbar">
-            <Label text="Total" styleClass="section-title"/>
+        <Region styleClass="divider"/>
+        <HBox styleClass="cart-total-row" spacing="8">
+            <Label text="Total" styleClass="cart-total-label"/>
             <Region HBox.hgrow="ALWAYS"/>
             <Label fx:id="totalLabel" styleClass="cart-total" text="Rp 0"/>
         </HBox>
-        <Button fx:id="payButton" text="PAY  (F12)" styleClass="pay-button" maxWidth="Infinity" onAction="#onPay"/>
+        <Button fx:id="payButton" text="Pay   F12" styleClass="pay-button" maxWidth="Infinity" onAction="#onPay">
+            <graphic><Icon name="pointofsale" size="18"/></graphic>
+        </Button>
         <Label fx:id="lastSaleLabel" styleClass="hint" wrapText="true"/>
+        <Label text="F2 search  ·  F12 pay  ·  Del remove line  ·  + / - quantity" styleClass="shortcut-hint" wrapText="true"/>
     </VBox>
 </HBox>

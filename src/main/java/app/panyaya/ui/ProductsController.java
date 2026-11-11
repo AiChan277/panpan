@@ -61,8 +61,8 @@ public class ProductsController extends BaseController {
                 UiUtil.<Product>numberColumn("Sellable", 80,
                         p -> Formatters.quantity(ctx.inventory().sellableQuantity(p.getId()))),
                 UiUtil.<Product>numberColumn("Shelf life", 80, p -> p.getShelfLifeHours() + " h"),
-                UiUtil.<Product>column("Status", 100, p -> p.isActive() ? "✓ Active" : "Archived")));
-        UiUtil.placeholder(table, "No products yet - click \"+ New product\" to add one, e.g. Japanese Milk Bread.");
+                UiUtil.<Product>badgeColumn("Status", 100, p -> p.isActive() ? "Active" : "Archived")));
+        UiUtil.placeholder(table, "No products yet - click \"New product\" to add one, e.g. Japanese Milk Bread.");
         table.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2 && can(Permission.MANAGE_PRODUCTS)) {
                 onEdit();
@@ -132,7 +132,8 @@ public class ProductsController extends BaseController {
         String question = archive
                 ? "Archive \"" + selected.getName() + "\"? It disappears from the POS and production planning but stays in history."
                 : "Restore \"" + selected.getName() + "\" so it can be sold and produced again?";
-        if (Dialogs.confirm(window(), archive ? "Archive product" : "Restore product", question)) {
+        if (archive ? Dialogs.confirmDanger(window(), "Archive product", question, "Archive")
+                : Dialogs.confirm(window(), "Restore product", question)) {
             attempt(() -> ctx.products().setArchived(selected.getId(), archive));
         }
     }

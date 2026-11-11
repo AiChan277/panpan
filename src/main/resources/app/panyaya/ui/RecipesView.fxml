@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.CheckBox?>
 <?import javafx.scene.control.Label?>
@@ -14,36 +15,58 @@
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="app.panyaya.ui.RecipesController" styleClass="view">
     <HBox styleClass="toolbar">
-        <TextField fx:id="searchField" promptText="Search recipe or product..." prefWidth="230"/>
-        <CheckBox fx:id="archivedCheck" text="Show archived"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Button fx:id="newButton" text="+ New recipe" styleClass="primary" onAction="#onNew"/>
-        <Button fx:id="editButton" text="Edit" onAction="#onEdit"/>
-        <Button fx:id="duplicateButton" text="Duplicate" onAction="#onDuplicate"/>
-        <Button fx:id="activateButton" text="Activate" onAction="#onActivate"/>
-        <Button fx:id="archiveButton" text="Archive" onAction="#onArchive"/>
-        <Button fx:id="starterButton" text="Import starter templates" onAction="#onImportStarter"/>
+        <HBox styleClass="search-box" prefWidth="250" minWidth="150">
+            <Icon name="search" size="15"/>
+            <TextField fx:id="searchField" promptText="Search recipe or product" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <CheckBox fx:id="archivedCheck" text="Show archived" minWidth="-Infinity"/>
+        <Region HBox.hgrow="ALWAYS" minWidth="8"/>
+        <Button fx:id="starterButton" text="Import starter templates" onAction="#onImportStarter">
+            <graphic><Icon name="download" size="15"/></graphic>
+        </Button>
+        <Button fx:id="archiveButton" text="Archive" onAction="#onArchive">
+            <graphic><Icon name="archive" size="15"/></graphic>
+        </Button>
+        <Button fx:id="activateButton" text="Activate" onAction="#onActivate">
+            <graphic><Icon name="check-circle" size="15"/></graphic>
+        </Button>
+        <Button fx:id="duplicateButton" text="Duplicate" onAction="#onDuplicate">
+            <graphic><Icon name="copy" size="15"/></graphic>
+        </Button>
+        <Button fx:id="editButton" text="Edit" onAction="#onEdit">
+            <graphic><Icon name="edit" size="15"/></graphic>
+        </Button>
+        <Button fx:id="newButton" text="New recipe" styleClass="primary" onAction="#onNew" minWidth="-Infinity">
+            <graphic><Icon name="plus" size="15"/></graphic>
+        </Button>
     </HBox>
-    <SplitPane dividerPositions="0.45" VBox.vgrow="ALWAYS">
-        <TableView fx:id="table"/>
-        <ScrollPane fitToWidth="true" styleClass="form-scroll">
-            <VBox fx:id="detailBox" styleClass="card" spacing="10">
-                <Label fx:id="titleLabel" styleClass="section-title" text="Select a recipe"/>
-                <Label fx:id="infoLabel" styleClass="muted" wrapText="true"/>
-                <Label fx:id="templateBanner" styleClass="banner-warning" wrapText="true" managed="false" visible="false"
-                       text="Starter template - example quantities only. Check and adjust before activating."/>
-                <Label text="Ingredients" styleClass="card-title"/>
-                <TableView fx:id="itemsTable" prefHeight="200"/>
-                <Label fx:id="costLabel" wrapText="true"/>
-                <Label text="Scale calculator - what do I need for..." styleClass="card-title"/>
+    <SplitPane dividerPositions="0.44" VBox.vgrow="ALWAYS">
+        <TableView fx:id="table" minWidth="300"/>
+        <ScrollPane fitToWidth="true" styleClass="form-scroll" minWidth="340">
+            <VBox fx:id="detailBox" styleClass="panel" spacing="10">
+                <Label fx:id="titleLabel" styleClass="detail-title" text="Select a recipe" wrapText="true"/>
+                <Label fx:id="infoLabel" styleClass="detail-meta" wrapText="true"/>
+                <Label fx:id="templateBanner" styleClass="banner-warning" wrapText="true" maxWidth="Infinity"
+                       managed="false" visible="false"
+                       text="Starter template - example quantities only. Check and adjust before activating.">
+                    <graphic><Icon name="alert" size="16"/></graphic>
+                </Label>
+                <Label text="Ingredients" styleClass="subsection-title"/>
+                <TableView fx:id="itemsTable" prefHeight="210" minHeight="150"/>
+                <Label fx:id="costLabel" wrapText="true" maxWidth="Infinity"/>
+                <Region styleClass="divider"/>
+                <Label text="Scale calculator - what do I need for..." styleClass="subsection-title"/>
                 <HBox styleClass="toolbar">
-                    <TextField fx:id="targetField" promptText="pieces, e.g. 48" prefWidth="140" onAction="#onCalculate"/>
-                    <Button text="Calculate" onAction="#onCalculate"/>
-                    <Label fx:id="scaleLabel" styleClass="hint"/>
+                    <TextField fx:id="targetField" promptText="pieces, e.g. 48" prefWidth="150" onAction="#onCalculate"/>
+                    <Button text="Calculate" onAction="#onCalculate" styleClass="keep-label">
+                        <graphic><Icon name="calculator" size="15"/></graphic>
+                    </Button>
                 </HBox>
-                <TableView fx:id="requirementsTable" prefHeight="200"/>
-                <Label text="Instructions" styleClass="card-title"/>
-                <Label fx:id="instructionsLabel" wrapText="true"/>
+                <Label fx:id="scaleLabel" managed="false" visible="false"/>
+                <TableView fx:id="requirementsTable" prefHeight="210" minHeight="150"/>
+                <Region styleClass="divider"/>
+                <Label text="Instructions" styleClass="subsection-title"/>
+                <Label fx:id="instructionsLabel" styleClass="body-text" wrapText="true"/>
             </VBox>
         </ScrollPane>
     </SplitPane>

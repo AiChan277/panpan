@@ -5,6 +5,7 @@ import app.panyaya.persistence.StartupInspector;
 import app.panyaya.service.BackupService;
 import app.panyaya.ui.common.Dialogs;
 import app.panyaya.ui.common.TaskRunner;
+import app.panyaya.ui.common.Icon;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -28,27 +29,33 @@ public class RecoveryView {
                         Runnable onRecovered, Runnable onStartNew) {
         Label title = new Label("Data recovery");
         title.getStyleClass().add("page-title");
-        Label problem = new Label(result.getMessage());
+        Label problem = new Label(result.getMessage(), new Icon("alert", 18));
         problem.setWrapText(true);
+        problem.setMaxWidth(Double.MAX_VALUE);
         problem.getStyleClass().add("banner-warning");
         Label explanation = new Label("Pan-ya Ya keeps the previous version of the data file and automatic daily "
                 + "backups. Choose how to continue:");
         explanation.setWrapText(true);
+        explanation.getStyleClass().add("muted");
 
         Button previous = new Button("Use the previous version of the data file (loses at most the last change)");
-        previous.getStyleClass().add("primary");
+        previous.getStyleClass().addAll("primary", "recovery-option");
+        previous.setGraphic(new Icon("restore", 16));
+        previous.setWrapText(true);
         previous.setMaxWidth(Double.MAX_VALUE);
         previous.setDisable(!ctx.getStartupInspector().previousGenerationExists());
         previous.setOnAction(e -> tasks.run(owner, () -> {
             ctx.getStartupInspector().recoverFromPreviousGeneration();
             return Boolean.TRUE;
         }, ok -> {
-            Dialogs.info(owner, "Recovered", "The previous version was restored. Please sign in.");
+            Dialogs.success(owner, "Recovered", "The previous version was restored. Please sign in.");
             onRecovered.run();
         }));
 
         Button backup = new Button("Restore from a backup file (.panyabak)...");
         backup.setMaxWidth(Double.MAX_VALUE);
+        backup.getStyleClass().add("recovery-option");
+        backup.setGraphic(new Icon("database", 16));
         backup.setOnAction(e -> {
             Path file = Dialogs.chooseOpenFile(owner, "Choose a backup", "Pan-ya Ya backup",
                     BackupService.EXTENSION, ctx.backups().getAutoBackupDir());
@@ -59,13 +66,14 @@ public class RecoveryView {
                 ctx.backups().restore(file, progress);
                 return Boolean.TRUE;
             }, ok -> {
-                Dialogs.info(owner, "Restored", "The backup was restored. Please sign in.");
+                Dialogs.success(owner, "Restored", "The backup was restored. Please sign in.");
                 onRecovered.run();
             });
         });
 
         Button startNew = new Button("Start a new, empty bakery");
-        startNew.getStyleClass().add("danger");
+        startNew.getStyleClass().addAll("danger", "recovery-option");
+        startNew.setGraphic(new Icon("plus", 16));
         startNew.setMaxWidth(Double.MAX_VALUE);
         startNew.setOnAction(e -> {
             if (Dialogs.confirmTyped(owner, "Start a new bakery",
@@ -84,7 +92,7 @@ public class RecoveryView {
         card.setMaxHeight(Double.NEGATIVE_INFINITY);
         root.getChildren().add(card);
         root.setAlignment(Pos.CENTER);
-        root.getStyleClass().add("auth-background");
+        root.getStyleClass().addAll("auth-root", "centered-page");
     }
 
     public Parent getRoot() {
