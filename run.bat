@@ -1,12 +1,10 @@
 @echo off
+rem Starts Pan-ya Ya without building it. All logic is in run.ps1 (next to this file):
+rem local build if there is one, otherwise the ready-made portable app (downloaded once).
 setlocal
-echo ===================================================
-echo Membuka Pan-ya Ya...
-echo ===================================================
-
-if exist "target\dist\Pan-ya Ya\Pan-ya Ya.exe" (
-    start "" "target\dist\Pan-ya Ya\Pan-ya Ya.exe" %*
-) else (
-    "target\runtime\bin\java.exe" -cp "target\panya-ya-1.0.0.jar;target\libs\*" app.panyaya.PanyaLauncher %*
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0run.ps1" %*
+if errorlevel 1 (
+    echo.
+    pause
 )
 endlocal

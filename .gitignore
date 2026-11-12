@@ -34,3 +34,6 @@ target/
 
 # Local runtime data when running with -Dpanyaya.home=./local-data
 local-data/
+
+# Ready-made app downloaded by run.bat / run.ps1
+portable/
