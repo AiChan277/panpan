@@ -223,7 +223,14 @@ public final class UiUtil {
         }
     }
 
-    /** Replaces the table content while keeping the selected row (matched by equals = same id). */
+    /**
+     * Replaces the table content while keeping the selected row (matched by equals = same id).
+     *
+     * <p>Entities are mutable and compare equal by id, so after an edit the "new" row object is equal
+     * to the old one. JavaFX cells skip redrawing when the item is equal, which left stale values on
+     * screen (e.g. a recipe still showing "Draft" after it was activated). {@code refresh()} forces
+     * every visible cell to read its value again.</p>
+     */
     public static <T> void setItems(TableView<T> table, List<T> items) {
         T selected = table.getSelectionModel().getSelectedItem();
         table.setItems(FXCollections.observableArrayList(items));
@@ -233,6 +240,7 @@ public final class UiUtil {
                 table.getSelectionModel().select(index);
             }
         }
+        table.refresh();
     }
 
     public static <T> void setChoices(ComboBox<T> box, List<T> items) {

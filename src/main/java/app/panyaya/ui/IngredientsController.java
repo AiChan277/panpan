@@ -107,7 +107,7 @@ public class IngredientsController extends BaseController {
             return;
         }
         lotsTitle.setText("Lots of " + stock.getIngredient().getName() + " (" + stock.getIngredient().getBaseUnit() + ")");
-        lotsTable.getItems().setAll(ctx.inventory().getIngredientLots(stock.getIngredient().getId(), true));
+        UiUtil.setItems(lotsTable, ctx.inventory().getIngredientLots(stock.getIngredient().getId(), true));
     }
 
     private Ingredient selected() {

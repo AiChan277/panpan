@@ -20,7 +20,7 @@
             <TextField fx:id="searchField" HBox.hgrow="ALWAYS"
                        promptText="Search name or scan SKU - Enter adds the first match"/>
         </HBox>
-        <Label fx:id="tileInfo" styleClass="hint"/>
+        <Label fx:id="tileInfo" styleClass="hint" wrapText="true"/>
         <ScrollPane fitToWidth="true" styleClass="form-scroll" VBox.vgrow="ALWAYS">
             <FlowPane fx:id="tilePane" hgap="10" vgap="10"/>
         </ScrollPane>

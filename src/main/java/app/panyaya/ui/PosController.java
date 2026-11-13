@@ -148,9 +148,23 @@ public class PosController extends BaseController {
             tilePane.getChildren().add(tile);
             shown++;
         }
-        tileInfo.setText(shown == 0 ? (available.isEmpty()
-                ? "No active products. Add products and produce or receive stock first." : "No product matches.")
-                : shown + " product(s). Only stock that is not expired can be sold.");
+        boolean nothingInStock = true;
+        for (ProductAvailability item : available) {
+            if (item.getSellablePieces() > 0) {
+                nothingInStock = false;
+            }
+        }
+        if (shown == 0) {
+            tileInfo.setText(available.isEmpty()
+                    ? "No active products. Add products and produce or receive stock first." : "No product matches.");
+        } else if (nothingInStock) {
+            // products exist but none can be sold: say where sellable stock comes from
+            tileInfo.setText(shown + " product(s), all sold out. Sellable stock is created by completing a production "
+                    + "order (Production: Plan > Start > Complete) for baked products, or by Inventory & Receiving > "
+                    + "Receive goods for resale products.");
+        } else {
+            tileInfo.setText(shown + " product(s). Only stock that is not expired can be sold.");
+        }
     }
 
     private void addFirstMatch() {
@@ -202,7 +216,8 @@ public class PosController extends BaseController {
     }
 
     private void showCart() {
-        cartTable.getItems().setAll(cart.getLines());
+        // CartLine objects are reused when the quantity changes; setItems also forces a redraw
+        UiUtil.setItems(cartTable, cart.getLines());
         totalLabel.setText(Formatters.money(cart.getTotal()));
         itemCountLabel.setText(cart.getItemCount() + (cart.getItemCount() == 1 ? " item" : " items"));
         payButton.setDisable(cart.isEmpty());

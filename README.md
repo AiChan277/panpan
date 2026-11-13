@@ -84,9 +84,9 @@ bundled runtime, builds the installer and writes `SHA256SUMS.txt`. Tool location
 
 | File | What it is |
 |---|---|
-| `Pan-ya Ya-1.0.0.exe` | Installer (Start menu + desktop shortcut, fixed upgrade code) |
+| `Pan-ya Ya-1.0.1.exe` | Installer (Start menu + desktop shortcut, fixed upgrade code) |
 | `Pan-ya Ya\Pan-ya Ya.exe` | Application launcher with bundled runtime |
-| `Pan-ya Ya-1.0.0-portable.zip` | Portable version (unzip and run) |
+| `Pan-ya Ya-1.0.1-portable.zip` | Portable version (unzip and run) |
 
 Data lives in `%LOCALAPPDATA%\PanyaYa`, outside Program Files: updating or uninstalling never
 deletes it.

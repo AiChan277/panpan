@@ -75,7 +75,7 @@ public class SuppliersController extends BaseController {
             return;
         }
         historyTitle.setText("Deliveries from " + supplier.getName());
-        historyTable.getItems().setAll(ctx.suppliers().receiptsOf(supplier.getId()));
+        UiUtil.setItems(historyTable, ctx.suppliers().receiptsOf(supplier.getId()));
     }
 
     private boolean edit(Supplier existing) {

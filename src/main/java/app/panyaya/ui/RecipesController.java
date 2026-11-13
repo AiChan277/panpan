@@ -219,6 +219,10 @@ public class RecipesController extends BaseController {
         product.setMaxWidth(Double.MAX_VALUE);
         form.add("For product", product);
         form.addHint("The copy starts as a Draft. Use it to make a variation or a recipe for another product.");
+        String resaleNote = RecipeEditorDialog.resaleProductsNote(ctx);
+        if (resaleNote != null) {
+            form.addHint(resaleNote);
+        }
         if (form.show(() -> ctx.recipes().duplicate(recipe.getId(), name.getText(),
                 product.getValue() == null ? recipe.getProductId() : product.getValue().getId()))) {
             refresh();

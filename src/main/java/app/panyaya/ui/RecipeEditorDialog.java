@@ -56,6 +56,10 @@ final class RecipeEditorDialog {
         HBox productRow = new HBox(6, product, newProduct);
         HBox.setHgrow(product, Priority.ALWAYS);
         form.add("Makes product *", productRow);
+        String resaleNote = resaleProductsNote(ctx);
+        if (resaleNote != null) {
+            form.addHint(resaleNote);
+        }
         newProduct.setOnAction(e -> {
             Product created = ProductDialog.show(owner, ctx, null, ProductType.MANUFACTURED);
             if (created != null) {
@@ -201,6 +205,27 @@ final class RecipeEditorDialog {
             text += "\nCost unknown (never received): " + String.join(", ", unknown) + " - estimate incomplete.";
         }
         label.setText(text);
+    }
+
+    /**
+     * Only "Baked in-house" products can have a recipe. Users kept looking for products typed
+     * "Bought for resale" (e.g. Ice Tea) in the list, so the dialog names them and explains why.
+     *
+     * @return the explanation, or null when there are no active resale products
+     */
+    static String resaleProductsNote(AppContext ctx) {
+        List<Product> resale = ctx.products().getActiveResaleProducts();
+        if (resale.isEmpty()) {
+            return null;
+        }
+        List<String> names = new ArrayList<>();
+        for (Product p : resale) {
+            names.add(p.getName());
+        }
+        return "Only products of type \"" + ProductType.MANUFACTURED + "\" are listed. Not listed because they are \""
+                + ProductType.RESALE + "\": " + String.join(", ", names) + ". Resale products need no recipe - their "
+                + "stock comes from Inventory & Receiving > Receive goods. To make one in-house instead, edit it on the "
+                + "Products screen and change its Type (possible while it has no stock yet).";
     }
 
     static String ingredientName(AppContext ctx, long ingredientId) {

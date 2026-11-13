@@ -63,6 +63,15 @@ public class ProductsController extends BaseController {
                 UiUtil.<Product>numberColumn("Shelf life", 80, p -> p.getShelfLifeHours() + " h"),
                 UiUtil.<Product>badgeColumn("Status", 100, p -> p.isActive() ? "Active" : "Archived")));
         UiUtil.placeholder(table, "No products yet - click \"New product\" to add one, e.g. Japanese Milk Bread.");
+        // "Sellable" is calculated from stock and cannot be typed in; explain where it comes from
+        javafx.scene.control.TableColumn<Product, ?> sellable = table.getColumns().get(5);
+        javafx.scene.control.Label sellableHeader = new javafx.scene.control.Label(sellable.getText());
+        javafx.scene.control.Tooltip.install(sellableHeader, new javafx.scene.control.Tooltip(
+                "Pieces that can be sold now (not expired). Not edited here: it grows when a production order is "
+                        + "completed (baked products) or when goods are received (resale products), and shrinks "
+                        + "with sales and waste."));
+        sellable.setText("");
+        sellable.setGraphic(sellableHeader);
         table.setOnMouseClicked(e -> {
             if (e.getClickCount() == 2 && can(Permission.MANAGE_PRODUCTS)) {
                 onEdit();
@@ -92,6 +101,7 @@ public class ProductsController extends BaseController {
     public void refresh() {
         List<ProductCategory> all = ctx.products().getCategories(true);
         categoryList.setItems(FXCollections.observableArrayList(all));
+        categoryList.refresh(); // renamed / switched categories are equal by id; force a redraw
         UiUtil.allOption(categoryFilter, "All categories", all);
         refreshTable();
     }

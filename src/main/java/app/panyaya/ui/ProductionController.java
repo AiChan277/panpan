@@ -234,8 +234,15 @@ public class ProductionController extends BaseController {
                 if (!recipe.getItems().isEmpty()) {
                     recipe.setValue(recipe.getItems().get(0));
                 } else {
+                    long drafts = ctx.recipes().search("", false).stream()
+                            .filter(r -> r.getProductId() == product.getValue().getId()
+                                    && r.getStatus() == app.panyaya.model.recipe.RecipeStatus.DRAFT)
+                            .count();
                     UiUtil.notice(check, Badge.Tone.WARNING, "\"" + product.getValue().getName() + "\" has no ACTIVE "
-                            + "recipe. Create or activate one on the Recipes screen first.");
+                            + "recipe. " + (drafts > 0
+                            ? drafts + " Draft recipe(s) exist: an Owner must select it on the Recipes screen and press "
+                            + "\"Activate\" before it can be used for production."
+                            : "Create one on the Recipes screen and activate it first."));
                 }
             }
             updatePreview.run();

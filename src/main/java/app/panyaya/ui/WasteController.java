@@ -143,7 +143,7 @@ public class WasteController extends BaseController {
     @Override
     public void refresh() {
         fillItems();
-        endOfDayTable.getItems().setAll(ctx.waste().endOfDayCandidates());
+        UiUtil.setItems(endOfDayTable, ctx.waste().endOfDayCandidates());
         endOfDayHint.setText("Batches already expired or expiring before "
                 + String.format("%02d:00", ctx.settings().getSettings().getNearExpiryHours())
                 + " tomorrow. Select them (Ctrl/Shift for several) and write off in one step: expired ones as "
@@ -175,8 +175,26 @@ public class WasteController extends BaseController {
             }
             quantityCaption.setText("Quantity (pieces)");
         }
+        ItemChoice previous = itemBox.getValue();
         itemBox.getItems().setAll(items);
-        itemBox.setPromptText(items.isEmpty() ? "nothing in stock" : "choose...");
+        // keep the choice across refreshes, but never keep an item that has no stock any more
+        ItemChoice keep = null;
+        for (ItemChoice choice : items) {
+            if (previous != null && choice.kind == previous.kind && choice.id == previous.id) {
+                keep = choice;
+            }
+        }
+        itemBox.setValue(keep);
+        // an empty drop-down looked broken; disable it and say where stock comes from instead
+        itemBox.setDisable(items.isEmpty());
+        lotBox.setDisable(items.isEmpty());
+        if (items.isEmpty()) {
+            itemBox.setPromptText(kindBox.getValue() == StockKind.INGREDIENT
+                    ? "nothing in stock - receive ingredients first"
+                    : "nothing in stock - complete a production order or receive resale goods first");
+        } else {
+            itemBox.setPromptText("choose...");
+        }
         fillLots();
     }
 
