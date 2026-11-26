@@ -121,10 +121,10 @@ public class WasteController extends BaseController {
                 UiUtil.<FinishedGoodsBatch>numberColumn("Left", 50, b -> Formatters.quantity(b.getRemainingQuantity())),
                 UiUtil.<FinishedGoodsBatch>numberColumn("Loss", 90, b -> Formatters.money(b.getRemainingValue()))));
         endOfDayTable.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
-        UiUtil.placeholder(endOfDayTable, "✓ Nothing to write off tonight.");
+        endOfDayTable.setPlaceholder(UiUtil.allClear("Nothing to write off tonight."));
 
         historyTable.getColumns().setAll(Arrays.asList(
-                UiUtil.<WasteRecord>column("Time", 130, w -> Formatters.dateTime(w.getOccurredAt(), zone())),
+                UiUtil.<WasteRecord>column("Time", 150, w -> Formatters.dateTime(w.getOccurredAt(), zone())),
                 UiUtil.<WasteRecord>column("No.", 140, WasteRecord::getWasteNo),
                 UiUtil.<WasteRecord>column("Kind", 80, w -> w.getStockKind().toString()),
                 UiUtil.<WasteRecord>column("Item", 180, WasteRecord::getItemName),
@@ -143,7 +143,7 @@ public class WasteController extends BaseController {
     @Override
     public void refresh() {
         fillItems();
-        endOfDayTable.getItems().setAll(ctx.waste().endOfDayCandidates());
+        UiUtil.setItems(endOfDayTable, ctx.waste().endOfDayCandidates());
         endOfDayHint.setText("Batches already expired or expiring before "
                 + String.format("%02d:00", ctx.settings().getSettings().getNearExpiryHours())
                 + " tomorrow. Select them (Ctrl/Shift for several) and write off in one step: expired ones as "
@@ -175,8 +175,26 @@ public class WasteController extends BaseController {
             }
             quantityCaption.setText("Quantity (pieces)");
         }
+        ItemChoice previous = itemBox.getValue();
         itemBox.getItems().setAll(items);
-        itemBox.setPromptText(items.isEmpty() ? "nothing in stock" : "choose...");
+        // keep the choice across refreshes, but never keep an item that has no stock any more
+        ItemChoice keep = null;
+        for (ItemChoice choice : items) {
+            if (previous != null && choice.kind == previous.kind && choice.id == previous.id) {
+                keep = choice;
+            }
+        }
+        itemBox.setValue(keep);
+        // an empty drop-down looked broken; disable it and say where stock comes from instead
+        itemBox.setDisable(items.isEmpty());
+        lotBox.setDisable(items.isEmpty());
+        if (items.isEmpty()) {
+            itemBox.setPromptText(kindBox.getValue() == StockKind.INGREDIENT
+                    ? "nothing in stock - receive ingredients first"
+                    : "nothing in stock - complete a production order or receive resale goods first");
+        } else {
+            itemBox.setPromptText("choose...");
+        }
         fillLots();
     }
 
@@ -209,15 +227,15 @@ public class WasteController extends BaseController {
     private void updateLoss() {
         LotChoice choice = lotBox.getValue();
         if (choice == null) {
-            lossLabel.setText("Estimated loss: -");
+            lossLabel.setText("-");
             return;
         }
         try {
             BigDecimal quantity = NumberParser.parseQuantity(quantityField.getText(), "Quantity");
-            lossLabel.setText("Estimated loss: " + Formatters.money(
+            lossLabel.setText(Formatters.money(
                     ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)));
         } catch (ValidationException e) {
-            lossLabel.setText("Estimated loss: -");
+            lossLabel.setText("-");
         }
     }
 
@@ -231,9 +249,10 @@ public class WasteController extends BaseController {
         try {
             BigDecimal quantity = NumberParser.parseQuantity(quantityField.getText(), "Quantity");
             String item = itemBox.getValue().name;
-            if (!Dialogs.confirm(window(), "Record waste", "Write off " + Formatters.quantity(quantity) + " of " + item
+            if (!Dialogs.confirmDanger(window(), "Record waste", "Write off " + Formatters.quantity(quantity) + " of " + item
                     + " (" + reasonBox.getValue() + ")?\nEstimated loss: "
-                    + Formatters.money(ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)))) {
+                    + Formatters.money(ctx.waste().previewLoss(choice.lot.getStockKind(), choice.lot.getId(), quantity)),
+                    "Record waste")) {
                 return;
             }
             boolean ok = attempt(() -> {
@@ -267,8 +286,8 @@ public class WasteController extends BaseController {
             ids.add(batch.getId());
             loss = loss.add(batch.getRemainingValue());
         }
-        if (Dialogs.confirm(window(), "End-of-day write-off", "Write off " + ids.size() + " batch(es) in one step?\n"
-                + "Estimated loss: " + Formatters.money(loss))) {
+        if (Dialogs.confirmDanger(window(), "End-of-day write-off", "Write off " + ids.size() + " batch(es) in one step?\n"
+                + "Estimated loss: " + Formatters.money(loss), "Write off")) {
             attempt(() -> ctx.waste().writeOffEndOfDay(ids));
         }
     }

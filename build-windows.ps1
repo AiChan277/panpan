@@ -13,7 +13,7 @@
   Usage:  powershell -ExecutionPolicy Bypass -File build-windows.ps1
 #>
 param(
-    [string]$Version     = "1.0.0",                     # MSI rule: MAJOR.MINOR.BUILD, each <= 255/255/65535
+    [string]$Version     = "1.0.1",                     # MSI rule: MAJOR.MINOR.BUILD, each <= 255/255/65535
     [string]$JdkHome     = "$env:USERPROFILE\tools\jdk-25.0.5+8",
     [string]$JavafxJmods = "$env:USERPROFILE\tools\javafx-jmods-25.0.5",
     [string]$MavenHome   = "$env:USERPROFILE\tools\apache-maven-3.9.16",

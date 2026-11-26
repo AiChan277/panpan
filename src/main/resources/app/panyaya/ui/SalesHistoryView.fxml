@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
@@ -15,26 +16,40 @@
 <VBox xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="app.panyaya.ui.SalesHistoryController" styleClass="view">
     <HBox styleClass="toolbar">
-        <Label text="From"/>
-        <DatePicker fx:id="fromPicker" prefWidth="130"/>
-        <Label text="to"/>
-        <DatePicker fx:id="toPicker" prefWidth="130"/>
-        <TextField fx:id="searchField" promptText="Sale no. or product..." prefWidth="190"/>
-        <ComboBox fx:id="methodFilter" prefWidth="150"/>
-        <ComboBox fx:id="statusFilter" prefWidth="140"/>
-        <Region HBox.hgrow="ALWAYS"/>
-        <Label fx:id="totalsLabel" styleClass="muted"/>
+        <Label text="From" styleClass="field-label" minWidth="-Infinity"/>
+        <DatePicker fx:id="fromPicker" prefWidth="140" minWidth="120"/>
+        <Label text="to" styleClass="field-label" minWidth="-Infinity"/>
+        <DatePicker fx:id="toPicker" prefWidth="140" minWidth="120"/>
+        <HBox styleClass="search-box" prefWidth="220" minWidth="140" HBox.hgrow="SOMETIMES">
+            <Icon name="search" size="15"/>
+            <TextField fx:id="searchField" promptText="Sale no. or product" HBox.hgrow="ALWAYS"/>
+        </HBox>
+        <ComboBox fx:id="methodFilter" prefWidth="150" minWidth="110"/>
+        <ComboBox fx:id="statusFilter" prefWidth="140" minWidth="110"/>
     </HBox>
-    <SplitPane dividerPositions="0.62" VBox.vgrow="ALWAYS">
-        <TableView fx:id="table"/>
-        <VBox spacing="8">
-            <TextArea fx:id="receiptArea" editable="false" styleClass="mono" VBox.vgrow="ALWAYS"/>
-            <HBox spacing="6">
-                <Button text="Save receipt as text..." onAction="#onSaveReceipt"/>
-                <Region HBox.hgrow="ALWAYS"/>
-                <Button fx:id="voidButton" text="Void sale" styleClass="danger" onAction="#onVoid"/>
+    <HBox styleClass="section-header">
+        <Icon name="saleshistory" size="16"/>
+        <Label fx:id="totalsLabel" styleClass="card-title"/>
+    </HBox>
+    <SplitPane dividerPositions="0.66" VBox.vgrow="ALWAYS">
+        <TableView fx:id="table" minWidth="360"/>
+        <VBox styleClass="panel" minWidth="300">
+            <HBox styleClass="panel-header">
+                <Icon name="receipt" size="16"/>
+                <Label text="Receipt" styleClass="card-title"/>
             </HBox>
-            <Label text="Voiding is for mistakes on the same day. The sale stays in history as VOIDED and the bread goes back to its batch."
+            <TextArea fx:id="receiptArea" editable="false" styleClass="receipt-text" VBox.vgrow="ALWAYS"
+                      promptText="Select a sale to see its receipt."/>
+            <HBox spacing="8" alignment="CENTER_LEFT">
+                <Button text="Save as text" onAction="#onSaveReceipt">
+                    <graphic><Icon name="download" size="15"/></graphic>
+                </Button>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button fx:id="voidButton" text="Void sale" styleClass="danger" onAction="#onVoid">
+                    <graphic><Icon name="ban" size="15"/></graphic>
+                </Button>
+            </HBox>
+            <Label text="Voiding is for same-day mistakes. The sale stays in history as Voided and the bread goes back to its batch."
                    styleClass="hint" wrapText="true"/>
         </VBox>
     </SplitPane>

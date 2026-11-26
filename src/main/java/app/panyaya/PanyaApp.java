@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -66,8 +67,9 @@ public class PanyaApp extends Application {
         scene.getStylesheets().add(getClass().getResource(CSS).toExternalForm());
         stage.setScene(scene);
         stage.setTitle(AppContext.APP_NAME + " - Bakery Operations");
-        stage.setMinWidth(1100);
-        stage.setMinHeight(700);
+        // the layout adapts below 1240 px (icon sidebar, compact toolbars), so smaller windows work
+        stage.setMinWidth(1024);
+        stage.setMinHeight(680);
         addIcon(stage);
         stage.show();
 
@@ -126,15 +128,23 @@ public class PanyaApp extends Application {
     }
 
     private static Parent loadingView() {
+        ImageView logo = new ImageView(new Image(PanyaApp.class.getResource("/app/panyaya/ui/img/icon-64.png").toExternalForm()));
+        logo.setFitWidth(56);
+        logo.setFitHeight(56);
+        logo.setSmooth(true);
         Label brand = new Label("パン屋ヤ");
         brand.getStyleClass().add("brand-jp");
-        Label name = new Label("PAN-YA YA");
+        Label name = new Label("PAN-YA YA  ·  BAKERY OPERATIONS");
         name.getStyleClass().add("brand-latin");
+        ProgressIndicator progress = new ProgressIndicator();
+        progress.setPrefSize(28, 28);
         Label message = new Label("Loading bakery data...");
         message.getStyleClass().add("muted");
-        VBox box = new VBox(14, brand, name, new ProgressIndicator(), message);
+        VBox titles = new VBox(2, brand, name);
+        titles.setAlignment(Pos.CENTER);
+        VBox box = new VBox(18, logo, titles, progress, message);
         box.setAlignment(Pos.CENTER);
-        box.getStyleClass().add("auth-background");
+        box.getStyleClass().add("loading-view");
         return box;
     }
 

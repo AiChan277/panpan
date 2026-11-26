@@ -1,5 +1,6 @@
 package app.panyaya.ui;
 
+import javafx.scene.layout.FlowPane;
 import app.panyaya.report.DateRange;
 import app.panyaya.report.Report;
 import app.panyaya.report.ReportGenerator;
@@ -55,7 +56,7 @@ public class ReportsController extends BaseController {
     @FXML
     private TableView<List<String>> table;
     @FXML
-    private VBox summaryBox;
+    private FlowPane summaryBox;
     @FXML
     private Label chartTitle;
     @FXML
@@ -79,6 +80,7 @@ public class ReportsController extends BaseController {
         toPicker.setOnAction(e -> presetBox.setValue("Custom"));
         exportButton.setDisable(true);
         UiUtil.placeholder(table, "Choose a report and a period, then press Generate.");
+        chart.widthProperty().addListener((obs, old, width) -> fitBarGap());
         updateDescription();
     }
 
@@ -147,6 +149,13 @@ public class ReportsController extends BaseController {
         });
     }
 
+    /** Few categories would make one huge bar: the gap grows so a bar is at most about 56 px wide. */
+    private void fitBarGap() {
+        int count = chart.getData().isEmpty() ? 0 : chart.getData().get(0).getData().size();
+        double slot = (chart.getWidth() - 80) / Math.max(1, count);
+        chart.setCategoryGap(Math.max(10, slot - 56));
+    }
+
     private void show(Report report) {
         current = report;
         exportButton.setDisable(false);
@@ -174,7 +183,7 @@ public class ReportsController extends BaseController {
         summaryBox.getChildren().clear();
         for (String line : report.getSummary()) {
             Label label = new Label(line);
-            label.setStyle("-fx-font-weight: bold;");
+            label.getStyleClass().add("summary-item");
             summaryBox.getChildren().add(label);
         }
 
@@ -192,6 +201,7 @@ public class ReportsController extends BaseController {
             String label = entry.getKey().length() > 18 ? entry.getKey().substring(0, 17) + "." : entry.getKey();
             series.getData().add(new XYChart.Data<>(label, entry.getValue()));
         }
+        fitBarGap();
     }
 
     @FXML
@@ -211,7 +221,7 @@ public class ReportsController extends BaseController {
             return file;
         }, saved -> {
             shell.setStatus("Report exported to " + saved);
-            Dialogs.info(window(), "Export", "Saved " + saved.getFileName() + " (opens in Excel or LibreOffice).");
+            Dialogs.success(window(), "Export", "Saved " + saved.getFileName() + " (opens in Excel or LibreOffice).");
         });
     }
 }

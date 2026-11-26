@@ -1,5 +1,8 @@
 package app.panyaya.ui;
 
+import javafx.scene.layout.Region;
+import javafx.scene.layout.Priority;
+import app.panyaya.ui.common.Badge;
 import app.panyaya.exception.ValidationException;
 import app.panyaya.model.product.Product;
 import app.panyaya.model.sales.Cart;
@@ -48,6 +51,10 @@ public class PosController extends BaseController {
     private Button payButton;
     @FXML
     private Label lastSaleLabel;
+
+    /** Product tiles: 176 x 116 px minus padding (see .pos-tile in the stylesheet). */
+    private static final double TILE_CONTENT_WIDTH = 148;
+    private static final double TILE_CONTENT_HEIGHT = 92;
 
     private final Cart cart = new Cart();
     private List<ProductAvailability> available;
@@ -120,21 +127,44 @@ public class PosController extends BaseController {
             Label name = new Label(product.getName());
             name.getStyleClass().add("tile-name");
             name.setWrapText(true);
+            name.setMaxWidth(TILE_CONTENT_WIDTH);
+            name.setMaxHeight(44); // two lines, then "..."
             Label price = new Label(Formatters.money(product.getSellingPrice()));
             price.getStyleClass().add("tile-price");
-            Label stock = new Label(left > 0 ? left + " left" : "✖ sold out");
-            stock.getStyleClass().add("tile-stock");
+            Label stock = left > 0 ? new Label(left + " left") : new Badge("Sold out", Badge.Tone.NEUTRAL);
+            if (left > 0) {
+                stock.getStyleClass().add("tile-stock");
+            }
+            Region push = new Region();
+            VBox.setVgrow(push, Priority.ALWAYS);
+            VBox content = new VBox(4, name, push, price, stock);
+            content.setPrefSize(TILE_CONTENT_WIDTH, TILE_CONTENT_HEIGHT);
+            content.setMinSize(TILE_CONTENT_WIDTH, TILE_CONTENT_HEIGHT);
             Button tile = new Button();
-            tile.setGraphic(new VBox(3, name, price, stock));
+            tile.setGraphic(content);
             tile.getStyleClass().add("pos-tile");
             tile.setDisable(left <= 0);
             tile.setOnAction(e -> addToCart(product));
             tilePane.getChildren().add(tile);
             shown++;
         }
-        tileInfo.setText(shown == 0 ? (available.isEmpty()
-                ? "No active products. Add products and produce or receive stock first." : "No product matches.")
-                : shown + " product(s). Only stock that is not expired can be sold.");
+        boolean nothingInStock = true;
+        for (ProductAvailability item : available) {
+            if (item.getSellablePieces() > 0) {
+                nothingInStock = false;
+            }
+        }
+        if (shown == 0) {
+            tileInfo.setText(available.isEmpty()
+                    ? "No active products. Add products and produce or receive stock first." : "No product matches.");
+        } else if (nothingInStock) {
+            // products exist but none can be sold: say where sellable stock comes from
+            tileInfo.setText(shown + " product(s), all sold out. Sellable stock is created by completing a production "
+                    + "order (Production: Plan > Start > Complete) for baked products, or by Inventory & Receiving > "
+                    + "Receive goods for resale products.");
+        } else {
+            tileInfo.setText(shown + " product(s). Only stock that is not expired can be sold.");
+        }
     }
 
     private void addFirstMatch() {
@@ -186,9 +216,10 @@ public class PosController extends BaseController {
     }
 
     private void showCart() {
-        cartTable.getItems().setAll(cart.getLines());
+        // CartLine objects are reused when the quantity changes; setItems also forces a redraw
+        UiUtil.setItems(cartTable, cart.getLines());
         totalLabel.setText(Formatters.money(cart.getTotal()));
-        itemCountLabel.setText(cart.getItemCount() + " item(s)");
+        itemCountLabel.setText(cart.getItemCount() + (cart.getItemCount() == 1 ? " item" : " items"));
         payButton.setDisable(cart.isEmpty());
     }
 
@@ -236,7 +267,7 @@ public class PosController extends BaseController {
 
     @FXML
     private void onClear() {
-        if (!cart.isEmpty() && Dialogs.confirm(window(), "Clear cart", "Remove all items from the cart?")) {
+        if (!cart.isEmpty() && Dialogs.confirmDanger(window(), "Clear cart", "Remove all items from the cart?", "Clear cart")) {
             cart.clear();
             showCart();
             showTiles();

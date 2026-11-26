@@ -1,12 +1,16 @@
 package app.panyaya.ui.common;
 
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
+import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -33,16 +37,17 @@ public class FormDialog {
         okType = new ButtonType(okText, javafx.scene.control.ButtonBar.ButtonData.OK_DONE);
         dialog.getDialogPane().getButtonTypes().addAll(okType, ButtonType.CANCEL);
 
-        grid.setHgap(12);
-        grid.setVgap(10);
+        grid.getStyleClass().add("form-grid");
         ColumnConstraints labels = new ColumnConstraints();
         labels.setMinWidth(150);
+        labels.setPrefWidth(170);
         ColumnConstraints fields = new ColumnConstraints();
         fields.setHgrow(Priority.ALWAYS);
         fields.setMinWidth(320);
         grid.getColumnConstraints().addAll(labels, fields);
 
         errorLabel.getStyleClass().add("form-error");
+        errorLabel.setGraphic(new Icon("x-circle", 16));
         errorLabel.setWrapText(true);
         errorLabel.setMaxWidth(520);
         errorLabel.setManaged(false);
@@ -51,15 +56,30 @@ public class FormDialog {
         ScrollPane scroll = new ScrollPane(grid);
         scroll.setFitToWidth(true);
         scroll.getStyleClass().add("form-scroll");
-        VBox content = new VBox(12, scroll, errorLabel);
+        VBox content = new VBox(14, scroll, errorLabel);
         content.setPrefWidth(560);
         dialog.getDialogPane().setContent(content);
     }
 
-    /** Adds a labelled row and returns the control, so it can be created inline. */
+    /**
+     * Adds a labelled row and returns the control, so it can be created inline. A label ending in
+     * " *" marks a required field; the asterisk is drawn in the accent colour.
+     */
     public <C extends Node> C add(String label, C control) {
-        Label caption = new Label(label);
+        boolean required = label.endsWith(" *");
+        Label caption = new Label(required ? label.substring(0, label.length() - 2) : label);
         caption.getStyleClass().add("form-label");
+        if (required) {
+            Label mark = new Label("*");
+            mark.getStyleClass().add("required-mark");
+            caption.setGraphic(mark);
+            caption.setContentDisplay(ContentDisplay.RIGHT);
+            caption.setGraphicTextGap(3);
+        }
+        if (control instanceof TextArea || control instanceof javafx.scene.control.TableView) {
+            GridPane.setValignment(caption, VPos.TOP);
+            caption.setPadding(new Insets(6, 0, 0, 0));
+        }
         grid.add(caption, 0, row);
         grid.add(control, 1, row);
         GridPane.setHgrow(control, Priority.ALWAYS);

@@ -156,7 +156,7 @@ public class SettingsController extends BaseController {
                     + " are valid. Import all of them now (one save)?")) {
                 attempt(() -> {
                     int count = committer.commit(preview);
-                    Dialogs.info(window(), "Import", count + " " + what + " imported.");
+                    Dialogs.success(window(), "Import", count + " " + what + " imported.");
                 });
             }
         });
@@ -179,7 +179,7 @@ public class SettingsController extends BaseController {
             return file;
         }, saved -> {
             shell.setStatus("Exported " + saved);
-            Dialogs.info(window(), "Export", "Saved " + saved);
+            Dialogs.success(window(), "Export", "Saved " + saved);
         });
     }
 
@@ -225,7 +225,7 @@ public class SettingsController extends BaseController {
             return ctx.getStore().getValidator().validate(copy);
         }, (List<String> problems) -> {
             if (problems.isEmpty()) {
-                Dialogs.info(window(), "Integrity check", "✓ All checks passed. The data file is consistent.");
+                Dialogs.success(window(), "Integrity check", "All checks passed. The data file is consistent.");
             } else {
                 Dialogs.showText(window(), "Integrity check", problems.size() + " problem(s) found:\n\n"
                         + String.join("\n", problems), null, null);

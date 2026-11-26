@@ -28,7 +28,7 @@ public class UsersController extends BaseController {
                 UiUtil.<User>column("Username", 140, User::getUsername),
                 UiUtil.<User>column("Name", 200, User::getDisplayName),
                 UiUtil.<User>column("Role", 150, u -> u.getRole().toString()),
-                UiUtil.<User>column("Status", 110, u -> u.isActive() ? "✓ Active" : "Deactivated"),
+                UiUtil.<User>badgeColumn("Status", 110, u -> u.isActive() ? "Active" : "Deactivated"),
                 UiUtil.<User>column("Password", 200, u -> u.isMustChangePassword() ? "must change at next sign-in" : "set by user"),
                 UiUtil.<User>column("Created", 140, u -> Formatters.dateTime(u.getCreatedAt(), ctx.settings().getSettings().zone()))));
     }
@@ -103,9 +103,13 @@ public class UsersController extends BaseController {
     @FXML
     private void onToggle() {
         User user = selected("Activate / deactivate");
-        if (user != null && Dialogs.confirm(window(), user.isActive() ? "Deactivate user" : "Activate user",
-                (user.isActive() ? "Deactivate " : "Activate ") + user.getDisplayName() + "?"
-                        + (user.isActive() ? " They can no longer sign in; their past work stays in history." : ""))) {
+        if (user == null) {
+            return;
+        }
+        String question = (user.isActive() ? "Deactivate " : "Activate ") + user.getDisplayName() + "?"
+                + (user.isActive() ? " They can no longer sign in; their past work stays in history." : "");
+        if (user.isActive() ? Dialogs.confirmDanger(window(), "Deactivate user", question, "Deactivate")
+                : Dialogs.confirm(window(), "Activate user", question)) {
             attempt(() -> ctx.users().setActive(user.getId(), !user.isActive()));
         }
     }

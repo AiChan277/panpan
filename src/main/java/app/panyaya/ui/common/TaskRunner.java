@@ -3,7 +3,6 @@ package app.panyaya.ui.common;
 import app.panyaya.service.ProgressListener;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
-import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.VBox;
@@ -82,9 +81,16 @@ public class TaskRunner {
         Label message = new Label("Starting...");
         ProgressBar bar = new ProgressBar(0);
         bar.setPrefWidth(360);
-        VBox box = new VBox(12, message, bar);
-        box.setPadding(new Insets(20));
-        progressStage.setScene(new Scene(box));
+        bar.setMaxWidth(Double.MAX_VALUE);
+        message.getStyleClass().add("strong");
+        Label note = new Label("Please keep the application open until this finishes.");
+        note.getStyleClass().add("hint");
+        VBox box = new VBox(12, message, bar, note);
+        box.getStyleClass().add("progress-window");
+        box.setPrefWidth(420);
+        Scene progressScene = new Scene(box);
+        progressScene.getStylesheets().add(TaskRunner.class.getResource("/app/panyaya/ui/css/panyaya.css").toExternalForm());
+        progressStage.setScene(progressScene);
 
         Task<T> task = new Task<T>() {
             @Override

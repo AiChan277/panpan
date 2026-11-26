@@ -179,7 +179,7 @@ final class ReceiveGoodsDialog {
                     new ArrayList<>(lines));
         });
         if (ok) {
-            Dialogs.info(owner, "Goods received", saved[0].getReceiptNo() + " saved: " + saved[0].getLines().size()
+            Dialogs.success(owner, "Goods received", saved[0].getReceiptNo() + " saved: " + saved[0].getLines().size()
                     + " line(s), total " + Formatters.money(saved[0].getTotalCost()) + ".");
         }
         return ok;

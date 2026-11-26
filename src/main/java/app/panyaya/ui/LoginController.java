@@ -9,6 +9,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /** Sign-in screen. Password hashing is slow on purpose, so it runs in the background. */
 public class LoginController {
@@ -23,8 +25,25 @@ public class LoginController {
     private Label errorLabel;
     @FXML
     private Button signInButton;
+    @FXML
+    private HBox root;
+    @FXML
+    private VBox brandPanel;
+    @FXML
+    private Label versionLabel;
 
     private AppContext ctx;
+
+    /** Presentation only: the brand panel gives way to the form on narrow windows. */
+    @FXML
+    private void initialize() {
+        versionLabel.setText(AppContext.APP_NAME + " " + AppContext.APP_VERSION);
+        root.widthProperty().addListener((obs, old, width) -> {
+            boolean wide = width.doubleValue() >= 900;
+            brandPanel.setVisible(wide);
+            brandPanel.setManaged(wide);
+        });
+    }
     private TaskRunner tasks;
     private Runnable onSignedIn;
 

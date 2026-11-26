@@ -1,81 +1,130 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import app.panyaya.ui.common.CardGrid?>
+<?import app.panyaya.ui.common.Icon?>
 <?import javafx.scene.chart.BarChart?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 
 <ScrollPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="app.panyaya.ui.DashboardController" fitToWidth="true" styleClass="form-scroll">
-    <VBox styleClass="view">
-        <HBox styleClass="toolbar">
-            <Label fx:id="dateLabel" styleClass="section-title"/>
+    <VBox styleClass="view" spacing="16">
+        <HBox styleClass="dashboard-meta">
+            <Icon name="calendar" size="16"/>
+            <Label fx:id="dateLabel" styleClass="dashboard-date"/>
             <Region HBox.hgrow="ALWAYS"/>
+            <Icon name="clock" size="14"/>
             <Label fx:id="updatedLabel" styleClass="hint"/>
-            <Button text="Refresh" onAction="#onRefresh"/>
-        </HBox>
-        <FlowPane fx:id="kpiPane" hgap="12" vgap="12"/>
-
-        <HBox spacing="12">
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="Revenue, last 14 days" styleClass="card-title"/>
-                <BarChart fx:id="revenueChart" legendVisible="false" animated="false" prefHeight="250">
-                    <xAxis><CategoryAxis/></xAxis>
-                    <yAxis><NumberAxis/></yAxis>
-                </BarChart>
-            </VBox>
-            <VBox styleClass="card" prefWidth="380" minWidth="320">
-                <Label text="Waste cost by reason, last 7 days" styleClass="card-title"/>
-                <PieChart fx:id="wasteChart" animated="false" prefHeight="250" labelsVisible="false"/>
-                <Label fx:id="wasteEmptyLabel" styleClass="empty-state" text="No waste recorded in the last 7 days."/>
-            </VBox>
         </HBox>
 
-        <HBox spacing="12">
-            <VBox styleClass="card" HBox.hgrow="ALWAYS" prefWidth="300">
-                <HBox styleClass="toolbar">
+        <!-- key figures: one strip, the 1 px gaps act as divider lines -->
+        <CardGrid fx:id="kpiPane" styleClass="kpi-strip" hgap="1" vgap="1" cornerRadius="8"
+                  minColumnWidth="215" maxColumns="4"/>
+
+        <CardGrid minColumnWidth="400" maxColumns="2" columnWeights="3,2" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Label text="Revenue, last 14 days" styleClass="card-title"/>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <HBox spacing="14" alignment="CENTER_RIGHT">
+                        <HBox spacing="6" alignment="CENTER_LEFT">
+                            <Region styleClass="legend-swatch, past"/>
+                            <Label text="Earlier days" styleClass="chart-legend-note"/>
+                        </HBox>
+                        <HBox spacing="6" alignment="CENTER_LEFT">
+                            <Region styleClass="legend-swatch, today"/>
+                            <Label text="Today" styleClass="chart-legend-note"/>
+                        </HBox>
+                    </HBox>
+                </HBox>
+                <Label fx:id="revenueSummary" styleClass="hint"/>
+                <StackPane VBox.vgrow="ALWAYS" minHeight="240">
+                    <BarChart fx:id="revenueChart" styleClass="revenue-chart" legendVisible="false" animated="false"
+                              categoryGap="12" barGap="0" verticalGridLinesVisible="false"
+                              alternativeRowFillVisible="false" prefHeight="260" minHeight="220">
+                        <xAxis><CategoryAxis tickLabelGap="6"/></xAxis>
+                        <yAxis><NumberAxis fx:id="revenueAxis" minorTickVisible="false" tickLabelGap="8"/></yAxis>
+                    </BarChart>
+                    <VBox fx:id="revenueEmpty" alignment="CENTER" visible="false"/>
+                </StackPane>
+            </VBox>
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Label text="Waste cost by reason, last 7 days" styleClass="card-title"/>
+                </HBox>
+                <Label fx:id="wasteTotalLabel" styleClass="waste-total"/>
+                <Label fx:id="wasteNote" styleClass="hint" wrapText="true"/>
+                <VBox fx:id="wasteBox" spacing="14" VBox.vgrow="ALWAYS"/>
+            </VBox>
+        </CardGrid>
+
+        <HBox styleClass="section-header">
+            <Label text="Stock alerts" styleClass="section-title"/>
+            <Label fx:id="alertSummary" styleClass="hint"/>
+        </HBox>
+        <CardGrid minColumnWidth="300" maxColumns="3" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="ingredients" size="16"/>
                     <Label text="Low-stock ingredients" styleClass="card-title"/>
+                    <Label fx:id="lowStockCount" styleClass="count-pill"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Ingredients" styleClass="link" onAction="#onOpenIngredients"/>
+                    <Button text="Ingredients" styleClass="link" onAction="#onOpenIngredients">
+                        <graphic><Icon name="chevron-right" size="12"/></graphic>
+                    </Button>
                 </HBox>
-                <ListView fx:id="lowStockList" prefHeight="160"/>
+                <ListView fx:id="lowStockList" styleClass="flat" prefHeight="232" VBox.vgrow="ALWAYS"/>
             </VBox>
-            <VBox styleClass="card" HBox.hgrow="ALWAYS" prefWidth="300">
-                <HBox styleClass="toolbar">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="inventory" size="16"/>
                     <Label text="Ingredients expiring / expired" styleClass="card-title"/>
+                    <Label fx:id="expiringIngredientCount" styleClass="count-pill"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Inventory" styleClass="link" onAction="#onOpenInventory"/>
+                    <Button text="Inventory" styleClass="link" onAction="#onOpenInventory">
+                        <graphic><Icon name="chevron-right" size="12"/></graphic>
+                    </Button>
                 </HBox>
-                <ListView fx:id="expiringIngredientList" prefHeight="160"/>
+                <ListView fx:id="expiringIngredientList" styleClass="flat" prefHeight="232" VBox.vgrow="ALWAYS"/>
             </VBox>
-            <VBox styleClass="card" HBox.hgrow="ALWAYS" prefWidth="300">
-                <HBox styleClass="toolbar">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="products" size="16"/>
                     <Label text="Products expiring / expired" styleClass="card-title"/>
+                    <Label fx:id="expiringProductCount" styleClass="count-pill"/>
                     <Region HBox.hgrow="ALWAYS"/>
-                    <Button text="Waste" styleClass="link" onAction="#onOpenWaste"/>
+                    <Button text="Waste" styleClass="link" onAction="#onOpenWaste">
+                        <graphic><Icon name="chevron-right" size="12"/></graphic>
+                    </Button>
                 </HBox>
-                <ListView fx:id="expiringProductList" prefHeight="160"/>
+                <ListView fx:id="expiringProductList" styleClass="flat" prefHeight="232" VBox.vgrow="ALWAYS"/>
             </VBox>
-        </HBox>
+        </CardGrid>
 
-        <HBox spacing="12">
-            <VBox styleClass="card" HBox.hgrow="ALWAYS">
-                <Label text="Production vs. sales today" styleClass="card-title"/>
-                <TableView fx:id="productionTable" prefHeight="200"/>
+        <CardGrid minColumnWidth="420" maxColumns="2" columnWeights="3,2" hgap="14" vgap="14">
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="production" size="16"/>
+                    <Label text="Production vs. sales today" styleClass="card-title"/>
+                </HBox>
+                <TableView fx:id="productionTable" prefHeight="230"/>
             </VBox>
-            <VBox styleClass="card" prefWidth="420">
-                <Label text="Best sellers, last 7 days" styleClass="card-title"/>
-                <TableView fx:id="topTable" prefHeight="200"/>
+            <VBox styleClass="panel">
+                <HBox styleClass="panel-header">
+                    <Icon name="trend-up" size="16"/>
+                    <Label text="Best sellers, last 7 days" styleClass="card-title"/>
+                </HBox>
+                <TableView fx:id="topTable" prefHeight="230"/>
             </VBox>
-        </HBox>
+        </CardGrid>
     </VBox>
 </ScrollPane>
