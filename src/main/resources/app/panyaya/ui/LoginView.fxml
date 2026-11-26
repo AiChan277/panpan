@@ -66,6 +66,8 @@
             </Label>
             <Button fx:id="signInButton" text="Sign in" defaultButton="true" maxWidth="Infinity" styleClass="primary"
                     onAction="#onSignIn"/>
+            <Button text="Lupa kata sandi?" maxWidth="Infinity" styleClass="link-button"
+                    onAction="#onForgotPassword"/>
             <Label text="Accounts are created by the Owner under User Management." styleClass="hint" wrapText="true"/>
         </VBox>
     </StackPane>

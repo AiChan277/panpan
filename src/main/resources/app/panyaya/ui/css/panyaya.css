@@ -1759,3 +1759,36 @@
 .button.plain:default:hover {
     -fx-background-color: -line-strong, -surface-2;
 }
+
+/* ---------- link-button (Lupa kata sandi? / Kembali) ---------- */
+.button.link-button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-border-color: transparent;
+    -fx-text-fill: -accent;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 12.5px;
+    -fx-cursor: hand;
+    -fx-padding: 4 0 4 0;
+    -fx-underline: true;
+}
+.button.link-button:hover {
+    -fx-background-color: transparent;
+    -fx-text-fill: -accent-hover;
+}
+.button.link-button:pressed {
+    -fx-background-color: transparent;
+    -fx-text-fill: -accent-press;
+}
+
+/* ---------- form-success (pesan sukses reset password) ---------- */
+.form-success {
+    -fx-text-fill: #345a37;
+    -fx-background-color: -success-bg;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 6;
+    -fx-graphic-text-gap: 8;
+}
+.form-success .icon-line {
+    -fx-stroke: -success;
+}

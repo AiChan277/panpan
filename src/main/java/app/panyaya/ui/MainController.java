@@ -137,6 +137,8 @@ public class MainController implements Shell {
     @FXML
     private Button passwordButton;
     @FXML
+    private Button securityQaButton;
+    @FXML
     private Button signOutButton;
     @FXML
     private Label userLabel;
@@ -295,7 +297,7 @@ public class MainController implements Shell {
             button.setContentDisplay(value ? ContentDisplay.GRAPHIC_ONLY : ContentDisplay.LEFT);
             button.setTooltip(value ? new Tooltip(navItems.get(entry.getKey()).label) : null);
         }
-        for (Button button : new Button[]{passwordButton, signOutButton}) {
+        for (Button button : new Button[]{passwordButton, securityQaButton, signOutButton}) {
             button.setContentDisplay(value ? ContentDisplay.GRAPHIC_ONLY : ContentDisplay.LEFT);
         }
         double target = value ? SIDEBAR_COLLAPSED : SIDEBAR_WIDTH;
@@ -423,6 +425,13 @@ public class MainController implements Shell {
     private void onChangePassword() {
         if (PasswordDialogs.change(stage, ctx)) {
             Dialogs.success(stage, "Password changed", "Your password was changed.");
+        }
+    }
+
+    @FXML
+    private void onSecurityQA() {
+        if (PasswordDialogs.securityQA(stage, ctx)) {
+            Dialogs.success(stage, "Security Q&A saved", "Your security question and answer have been updated.");
         }
     }
 

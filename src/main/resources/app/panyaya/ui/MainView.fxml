@@ -47,6 +47,11 @@
                         <graphic><Icon name="key" size="15"/></graphic>
                         <tooltip><Tooltip text="Change password"/></tooltip>
                     </Button>
+                    <Button fx:id="securityQaButton" text="Security Q&amp;A" onAction="#onSecurityQA"
+                            styleClass="sidebar-button">
+                        <graphic><Icon name="shield" size="15"/></graphic>
+                        <tooltip><Tooltip text="Security Q&amp;A (Forgot Password)"/></tooltip>
+                    </Button>
                     <Button fx:id="signOutButton" text="Sign out" onAction="#onSignOut" styleClass="sidebar-button">
                         <graphic><Icon name="logout" size="15"/></graphic>
                         <tooltip><Tooltip text="Sign out"/></tooltip>
