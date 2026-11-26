@@ -5,6 +5,7 @@ import app.panyaya.persistence.InstanceLock;
 import app.panyaya.persistence.StartupInspector;
 import app.panyaya.service.PasswordHasher;
 import app.panyaya.ui.LoginController;
+import app.panyaya.ui.ForgotPasswordController;
 import app.panyaya.ui.MainController;
 import app.panyaya.ui.RecoveryView;
 import app.panyaya.ui.SetupController;
@@ -101,7 +102,12 @@ public class PanyaApp extends Application {
 
     public void showLogin() {
         LoginController controller = setRoot("/app/panyaya/ui/LoginView.fxml");
-        controller.init(ctx, tasks, this::showMain);
+        controller.init(ctx, tasks, this::showMain, this::showForgotPassword);
+    }
+
+    public void showForgotPassword() {
+        ForgotPasswordController controller = setRoot("/app/panyaya/ui/ForgotPasswordView.fxml");
+        controller.init(ctx, tasks, this::showLogin);
     }
 
     private void showRecovery(StartupInspector.Result result) {

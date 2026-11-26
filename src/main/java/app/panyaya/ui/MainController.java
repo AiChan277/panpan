@@ -206,6 +206,13 @@ public class MainController implements Shell {
     }
 
     @FXML
+    private void onSecurityQA() {
+        if (PasswordDialogs.securityQA(stage, ctx)) {
+            Dialogs.info(stage, "Security Q&A saved", "Your security question and answer have been updated.");
+        }
+    }
+
+    @FXML
     private void onSignOut() {
         if (currentView != null && "Pos".equals(currentView)
                 && !Dialogs.confirm(stage, "Sign out", "Sign out? An unpaid cart will be discarded.")) {

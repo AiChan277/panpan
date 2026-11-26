@@ -27,6 +27,12 @@ public class User extends BaseEntity {
     private Instant lockedUntil;
     private Instant createdAt;
 
+    // ── Fitur "Lupa Kata Sandi" ──────────────────────────────────────────────
+    /** Pertanyaan keamanan yang digunakan untuk verifikasi identitas. */
+    private String securityQuestion = "";
+    /** Jawaban keamanan; disimpan lowercase-stripped untuk perbandingan. */
+    private String securityAnswer = "";
+
     private User() {
     }
 
@@ -82,6 +88,20 @@ public class User extends BaseEntity {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    /** Menyimpan pertanyaan dan jawaban keamanan. Jawaban disimpan lowercase untuk perbandingan. */
+    public void setSecurityQA(String question, String answer) {
+        this.securityQuestion = question == null ? "" : question.strip();
+        this.securityAnswer   = answer   == null ? "" : answer.strip().toLowerCase(java.util.Locale.ROOT);
+    }
+
+    public String getSecurityQuestion() {
+        return securityQuestion == null ? "" : securityQuestion;
+    }
+
+    public String getSecurityAnswer() {
+        return securityAnswer == null ? "" : securityAnswer;
     }
 
     public boolean hasPermission(Permission permission) {

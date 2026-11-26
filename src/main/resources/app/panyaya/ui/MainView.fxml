@@ -28,6 +28,8 @@
                     <Button text="Change password" onAction="#onChangePassword" styleClass="sidebar-button"/>
                     <Button text="Sign out" onAction="#onSignOut" styleClass="sidebar-button"/>
                 </HBox>
+                <Button text="Security Q&amp;A (Forgot Password)" onAction="#onSecurityQA"
+                        maxWidth="Infinity" styleClass="sidebar-button"/>
             </VBox>
         </VBox>
     </left>

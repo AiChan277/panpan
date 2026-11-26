@@ -57,8 +57,18 @@ public class UsersController extends BaseController {
         form.add("Role *", role);
         PasswordField password = form.add("Temporary password *", new PasswordField());
         form.addHint("Give the temporary password to the employee. They must choose their own password at the first sign-in.");
-        if (form.show(() -> ctx.users().createUser(username.getText(), name.getText(), role.getValue(),
-                password.getText().toCharArray()))) {
+        TextField securityQuestion = form.add("Security question", UiUtil.field("e.g. Nama hewan peliharaan pertama?", ""));
+        TextField securityAnswer = form.add("Security answer", UiUtil.field("Jawaban (case-insensitive)", ""));
+        form.addHint("Security Q&A lets the user reset their own password from the sign-in screen.");
+        if (form.show(() -> {
+            User created = ctx.users().createUser(username.getText(), name.getText(), role.getValue(),
+                    password.getText().toCharArray());
+            String q = securityQuestion.getText().strip();
+            String a = securityAnswer.getText().strip();
+            if (!q.isEmpty() && !a.isEmpty()) {
+                ctx.users().setSecurityQAForUser(created.getId(), q, a);
+            }
+        })) {
             refresh();
         }
     }
@@ -76,7 +86,22 @@ public class UsersController extends BaseController {
         role.getItems().setAll(Role.values());
         role.setValue(user.getRole());
         form.add("Role *", role);
-        if (form.show(() -> ctx.users().updateUser(user.getId(), name.getText(), role.getValue()))) {
+        TextField securityQuestion = form.add("Security question",
+                UiUtil.field("e.g. Nama hewan peliharaan pertama?", user.getSecurityQuestion()));
+        TextField securityAnswer = form.add("Security answer",
+                UiUtil.field("Leave blank to keep current", ""));
+        form.addHint("Security Q&A lets the user reset their own password from the sign-in screen.");
+        if (form.show(() -> {
+            ctx.users().updateUser(user.getId(), name.getText(), role.getValue());
+            String q = securityQuestion.getText().strip();
+            String a = securityAnswer.getText().strip();
+            if (!q.isEmpty() && !a.isEmpty()) {
+                ctx.users().setSecurityQAForUser(user.getId(), q, a);
+            } else if (!q.isEmpty() && a.isEmpty() && !user.getSecurityAnswer().isEmpty()) {
+                // Question changed but answer kept → update question only
+                ctx.users().setSecurityQAForUser(user.getId(), q, user.getSecurityAnswer());
+            }
+        })) {
             refresh();
         }
     }

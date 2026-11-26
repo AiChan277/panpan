@@ -21,5 +21,7 @@
         <Label fx:id="errorLabel" styleClass="form-error" wrapText="true" maxWidth="Infinity" managed="false" visible="false"/>
         <Button fx:id="signInButton" text="Sign in" defaultButton="true" maxWidth="Infinity" styleClass="primary"
                 onAction="#onSignIn"/>
+        <Button text="Lupa kata sandi?" maxWidth="Infinity" styleClass="link-button"
+                onAction="#onForgotPassword"/>
     </VBox>
 </StackPane>

@@ -95,6 +95,52 @@ public class UserService extends BaseService {
         });
     }
 
+    /**
+     * Mengubah pertanyaan dan jawaban keamanan milik user yang sedang login.
+     * Dipakai di Settings agar user bisa menyiapkan "Lupa Kata Sandi".
+     */
+    public void setSecurityQA(String question, String answer) throws BusinessException, PersistenceException {
+        User me = session.getUser();
+        if (me == null) {
+            throw new ValidationException("Please sign in first.");
+        }
+        final long id = me.getId();
+        store.execute("SET_SECURITY_QA", data -> {
+            BakeryData.findById(data.getUsers(), id).setSecurityQA(question, answer);
+            audit(data, "SET_SECURITY_QA", me.getUsername());
+            return null;
+        });
+    }
+
+    /**
+     * Mengubah pertanyaan dan jawaban keamanan untuk user tertentu (oleh Owner).
+     * Dipakai di UsersController saat membuat atau mengedit akun user.
+     */
+    public void setSecurityQAForUser(long userId, String question, String answer)
+            throws BusinessException, PersistenceException {
+        session.require(Permission.MANAGE_USERS);
+        store.execute("SET_SECURITY_QA", data -> {
+            User user = BakeryData.require(data.getUsers(), userId, "User");
+            user.setSecurityQA(question, answer);
+            audit(data, "SET_SECURITY_QA", user.getUsername() + " (by owner)");
+            return null;
+        });
+    }
+
+    /**
+     * Mengembalikan pertanyaan keamanan untuk username tertentu tanpa perlu sesi.
+     * Hanya mengembalikan pertanyaannya (bukan jawaban) sehingga aman ditampilkan.
+     * Mengembalikan string kosong jika tidak ada.
+     */
+    public String getSecurityQuestion(String username) {
+        String cleanName = TextUtil.normalize(username).toLowerCase(java.util.Locale.ROOT);
+        User user = AuthService.findByUsername(data(), cleanName);
+        if (user == null || !user.isActive()) {
+            return "";
+        }
+        return user.getSecurityQuestion();
+    }
+
     private static int countActiveOwners(BakeryData data) {
         int count = 0;
         for (User user : data.getUsers()) {

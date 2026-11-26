@@ -107,6 +107,66 @@ public class AuthService extends BaseService {
         session.signOut();
     }
 
+    /**
+     * Memverifikasi apakah username aktif dan jawaban pertanyaan keamanannya cocok.
+     *
+     * @param username username yang ingin mereset kata sandi
+     * @param answer   jawaban pertanyaan keamanan
+     * @return objek {@link User} yang terverifikasi
+     * @throws ValidationException jika username tidak ditemukan, tidak aktif,
+     *         belum memiliki pertanyaan keamanan, atau jawaban salah
+     */
+    public User verifySecurityAnswer(String username, String answer) throws ValidationException {
+        String cleanName = TextUtil.normalize(username).toLowerCase(Locale.ROOT);
+        User user = findByUsername(data(), cleanName);
+        if (user == null || !user.isActive()) {
+            throw new ValidationException("Username tidak ditemukan atau akun tidak aktif.");
+        }
+        String storedAnswer = user.getSecurityAnswer();
+        if (storedAnswer == null || storedAnswer.isBlank()) {
+            throw new ValidationException(
+                    "Akun ini belum memiliki pertanyaan keamanan. " +
+                    "Hubungi Owner untuk mereset kata sandi Anda.");
+        }
+        String inputAnswer = answer == null ? "" : answer.strip().toLowerCase(Locale.ROOT);
+        if (!inputAnswer.equals(storedAnswer)) {
+            throw new ValidationException("Jawaban tidak sesuai. Coba lagi.");
+        }
+        return user;
+    }
+
+    /**
+     * Reset kata sandi dari halaman login (tanpa sesi aktif) menggunakan
+     * pertanyaan keamanan. Jawaban dibandingkan case-insensitive.
+     *
+     * @param username    username yang ingin mereset kata sandi
+     * @param answer      jawaban pertanyaan keamanan
+     * @param newPassword kata sandi baru
+     * @throws app.panyaya.exception.ValidationException jika username tidak valid,
+     *         jawaban salah, atau kata sandi baru tidak memenuhi syarat
+     */
+    public void resetPasswordWithSecurityAnswer(String username, String answer, char[] newPassword)
+            throws BusinessException, PersistenceException {
+        User user;
+        try {
+            user = verifySecurityAnswer(username, answer);
+            validateNewPassword(username, newPassword);
+        } catch (ValidationException e) {
+            PasswordHasher.wipe(newPassword);
+            throw e;
+        }
+        String cleanName = user.getUsername();
+        String newHash = hasher.hash(newPassword);
+        PasswordHasher.wipe(newPassword);
+        final long id = user.getId();
+        store.execute("FORGOT_PASSWORD_RESET", data -> {
+            BakeryData.findById(data.getUsers(), id)
+                    .changePasswordHash(newHash, false);
+            audit(data, "FORGOT_PASSWORD_RESET", cleanName);
+            return null;
+        });
+    }
+
     public void changeOwnPassword(char[] currentPassword, char[] newPassword)
             throws BusinessException, PersistenceException {
         User user = session.getUser();

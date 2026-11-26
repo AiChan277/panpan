@@ -27,11 +27,14 @@ public class LoginController {
     private AppContext ctx;
     private TaskRunner tasks;
     private Runnable onSignedIn;
+    private Runnable onForgotPassword;
 
-    public void init(AppContext context, TaskRunner taskRunner, Runnable signedInCallback) {
+    public void init(AppContext context, TaskRunner taskRunner, Runnable signedInCallback,
+                     Runnable forgotPasswordCallback) {
         this.ctx = context;
         this.tasks = taskRunner;
         this.onSignedIn = signedInCallback;
+        this.onForgotPassword = forgotPasswordCallback;
         bakeryLabel.setText(ctx.getStore().getData().getSettings().getBakeryName());
         usernameField.requestFocus();
     }
@@ -51,6 +54,11 @@ public class LoginController {
             errorLabel.setManaged(true);
             passwordField.requestFocus();
         });
+    }
+
+    @FXML
+    private void onForgotPassword() {
+        onForgotPassword.run();
     }
 
     private void signedIn(User user) {

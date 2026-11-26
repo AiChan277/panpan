@@ -402,3 +402,28 @@
     -fx-border-color: -crust transparent transparent transparent;
     -fx-border-width: 2 0 0 0;
 }
+
+/* ---------- link-button (Lupa kata sandi? / Kembali) ---------- */
+.link-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: -crust-dark;
+    -fx-font-size: 12.5px;
+    -fx-cursor: hand;
+    -fx-padding: 4 0 4 0;
+    -fx-underline: true;
+}
+.link-button:hover {
+    -fx-text-fill: -crust;
+}
+.link-button:pressed {
+    -fx-text-fill: -cocoa;
+}
+
+/* ---------- form-success (pesan sukses reset password) ---------- */
+.form-success {
+    -fx-text-fill: -ok;
+    -fx-background-color: #e7f0e7;
+    -fx-padding: 8 10 8 10;
+    -fx-background-radius: 6;
+}
