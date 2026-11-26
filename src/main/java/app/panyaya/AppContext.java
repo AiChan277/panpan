@@ -41,7 +41,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class AppContext {
 
     public static final String APP_NAME = "Pan-ya Ya";
-    public static final String APP_VERSION = "1.0.1";
+    public static final String APP_VERSION = "1.1.0";
 
     private final AppPaths paths;
     private final Clock clock;

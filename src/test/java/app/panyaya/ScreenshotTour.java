@@ -73,8 +73,8 @@ public final class ScreenshotTour {
             });
             System.out.println("captured " + view);
         }
-        // login and setup screens
-        for (String fxml : new String[]{"LoginView", "SetupView"}) {
+        // login, setup and forgot-password screens
+        for (String fxml : new String[]{"LoginView", "SetupView", "ForgotPasswordView"}) {
             runOnFx(() -> {
                 Parent root = new FXMLLoader(ScreenshotTour.class.getResource("/app/panyaya/ui/" + fxml + ".fxml")).load();
                 scene[0].setRoot(root);

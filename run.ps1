@@ -16,9 +16,9 @@ $ProgressPreference = "SilentlyContinue"   # Invoke-WebRequest is very slow with
 
 $Root        = $PSScriptRoot
 $AppName     = "Pan-ya Ya"
-$ReleaseUrl  = "https://github.com/AiChan277/panpan/releases/download/a1.0.1"
+$ReleaseUrl  = "https://github.com/AiChan277/panpan/releases/download/v1.1.0"
 if ($env:PANYAYA_RELEASE_URL) { $ReleaseUrl = $env:PANYAYA_RELEASE_URL.TrimEnd("/") }
-$ZipAsset    = "Pan-ya.Ya-1.0.1-portable.zip"
+$ZipAsset    = "Pan-ya.Ya-1.1.0-portable.zip"
 $SumsAsset   = "SHA256SUMS.txt"
 $PortableDir = Join-Path $Root "portable"
 $AppArgs     = @($args)
@@ -48,7 +48,7 @@ function Install-Portable {
         Invoke-WebRequest -UseBasicParsing -Uri "$ReleaseUrl/$ZipAsset" -OutFile $zip
         Invoke-WebRequest -UseBasicParsing -Uri "$ReleaseUrl/$SumsAsset" -OutFile $sums
 
-        # the checksum file lists the zip under its original name ("Pan-ya.Ya-1.0.1-portable.zip")
+        # the checksum file lists the zip under its original name ("Pan-ya.Ya-1.1.0-portable.zip")
         $line = Get-Content $sums | Where-Object { $_ -match "portable\.zip\s*$" } | Select-Object -First 1
         if (-not $line) { throw "$SumsAsset has no entry for the portable zip." }
         $expected = ($line -split "\s+")[0].ToLower()

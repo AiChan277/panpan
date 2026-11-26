@@ -37,7 +37,7 @@ All data is stored in **one JSON file** (`pan-ya-ya.json`), written atomically. 
 | Build | Maven 3.9 |
 | JSON | Jackson 2.21 (LTS line) - the only third-party runtime library |
 | Files | `java.io`, `java.nio.file`, `java.util.zip` |
-| Tests | JUnit 5.14 (46 tests) |
+| Tests | JUnit 5.14 (49 tests) |
 | Packaging | jlink + jpackage + WiX Toolset 5 → Windows installer EXE |
 
 ## Prerequisites (developers)
@@ -84,9 +84,9 @@ bundled runtime, builds the installer and writes `SHA256SUMS.txt`. Tool location
 
 | File | What it is |
 |---|---|
-| `Pan-ya Ya-1.0.1.exe` | Installer (Start menu + desktop shortcut, fixed upgrade code) |
+| `Pan-ya Ya-1.1.0.exe` | Installer (Start menu + desktop shortcut, fixed upgrade code) |
 | `Pan-ya Ya\Pan-ya Ya.exe` | Application launcher with bundled runtime |
-| `Pan-ya Ya-1.0.1-portable.zip` | Portable version (unzip and run) |
+| `Pan-ya Ya-1.1.0-portable.zip` | Portable version (unzip and run) |
 
 Data lives in `%LOCALAPPDATA%\PanyaYa`, outside Program Files: updating or uninstalling never
 deletes it.
